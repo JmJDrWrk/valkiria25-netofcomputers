@@ -1,0 +1,41 @@
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+
+import Header from './components/Header';
+import Footer from './components/Footer';
+
+import MainHome from './screens/MainHome';
+
+import HomeProjectRoutes from './screens/home/miniroutes'
+import ExploreProject from './screens/explore/miniroutes'
+import GuitarTunerProject from './screens/guitar-tuner/miniroutes'
+import EcoFriendProject from './screens/eco-friend/miniroutes'
+import BetaTaskPusherProject from './screens/beta-task-pusher/miniroutes'
+import TaskConsumer from './screens/beta-task-pusher/taskPuller'
+
+
+function AppRoutes() {
+  return (
+    <Router>
+      {/* <Header /> */}
+      <Routes>
+
+        {/* MAIN DOMAIN */}
+        <Route path="/" element={<MainHome />} />
+
+        {/* PER TINY PROJECT */}
+
+        <Route path="/home" element={<HomeProjectRoutes/>} />
+        <Route path="/explore" element={<ExploreProject/>} />
+        <Route path="/guitar-tuner" element={<GuitarTunerProject/>} />
+        <Route path="/eco-friend" element={<EcoFriendProject/>} />
+        <Route path="/beta-task-pusher" element={<BetaTaskPusherProject/>} />
+        <Route path="/beta-task-pusher/pull" element={<TaskConsumer/>} />
+
+      </Routes>
+      {/* <Footer flexGrow={1} /> */}
+    </Router>
+  );
+}
+
+export default AppRoutes;
