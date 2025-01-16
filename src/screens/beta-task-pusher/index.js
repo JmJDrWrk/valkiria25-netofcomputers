@@ -9,46 +9,98 @@ const TaskCreator = () => {
   const [taskId, setTaskId] = useState(null);
   const [tasks, setTasks] = useState([]); // New state to hold the tasks
 
-  useEffect(() => {
-    // Connect to the Socket.IO server with authentication
-    const newSocket = io('wss://netofcomputers.com:4999', {
-      transports: ['websocket'], // Ensure WebSocket transport
-      auth: {
-        token: 'AAAAABniOQwpfoVSdgZjQhg1DfpjvKGj59GJsSmZ-XPk1dtfJRUgB3cqIR6nHwaYg25YVGukS6e01LE8Mh7Hw3Eli5V2UlQQFE-Z0tfk7GRCl0GQUn9nAWWg665zjl1MaeEjA5JuWr7',
-      },
-    });
+  // useEffect(() => {
+  //   // Connect to the Socket.IO server with authentication
+  //   const newSocket = io('wss://netofcomputers.com:5113', {
+  //     transports: ['websocket'], // Ensure WebSocket transport
+  //     auth: {
+  //       token: 'gAAAAABniOc-qhDKELOVssGMyvQ1OmTkciDaUKCpXv3cR4mtWoLOcxUFE3yz4dXabsIeNiKyrlgqRbUyKMCJ1dnCb_a0A8JCixhxjR6l-wMIa2wwmKSbiBe5li-L4HboixS1XYQygS5Y',
+  //     },
+  //   });
 
+
+  //   newSocket.on('connect', () => {
+  //     console.log('Connected to server with SID:', newSocket.id);
+  //   });
+
+  //   newSocket.on('disconnect', () => {
+  //     console.log('Disconnected from server.');
+  //   });
+
+  //   // Listen for the task_pushed event
+  //   newSocket.on('task_pushed', (data) => {
+  //     console.log('Task pushed event received:', data);
+  //     if (data && data.task_identifier) {
+  //       setTaskId(data.task_identifier); // Update taskId with received identifier
+  //     }
+  //   });
+  //   newSocket.on('updated', (data) => {
+  //     console.log('Updated--->:', data);
+  //   });
+
+  //   // Listen for the your_tasks event
+  //   newSocket.on('your_tasks', (data) => {
+  //     console.log('Received updated set of my tasks', data);
+  //     if (data && data.tasks) {
+  //       setTasks(data.tasks); // Update tasks state
+  //     }
+  //   });
+
+  //   setSocket(newSocket);
+
+  //   // Cleanup on component unmount
+  //   return () => {
+  //     newSocket.disconnect();
+  //   };
+  // }, []);
+
+  useEffect(() => {
+    const newSocket = io('wss://netofcomputers.com:5113', {
+      transports: ['websocket'],
+      auth: { token: 'gAAAAABniRf4hefWUhPluLlK5_Vwgkp-PgKFLniAJJNLTOF0oQGqNr9xbK-pxFwHE0XhQXVtV77P_VnCnUx7-Y7cbAwVNDZtKK5RJTsxh4YKZ4BRi48zsXTys1CMyjUi0u821W9FQvvlGPg4xGtvAMlsUabO6mDmMwTq0QR3DtvnJQNchLnsA2TQOU7g3Z6wU7Iwv0id8PrP' },
+      reconnectionAttempts: 5,  // Allow up to 5 reconnection attempts
+      reconnectionDelay: 1000,  // 1 second delay between attempts
+    });
 
     newSocket.on('connect', () => {
       console.log('Connected to server with SID:', newSocket.id);
     });
 
-    newSocket.on('disconnect', () => {
-      console.log('Disconnected from server.');
+    newSocket.on('disconnect', (reason) => {
+      console.log('Disconnected from server due to:', reason);
     });
 
-    // Listen for the task_pushed event
+    // Handle reconnection failure
+    newSocket.on('reconnect_failed', () => {
+      console.error('Reconnection attempts failed.');
+      alert('Failed to reconnect to the server.');
+    });
+
     newSocket.on('task_pushed', (data) => {
       console.log('Task pushed event received:', data);
       if (data && data.task_identifier) {
-        setTaskId(data.task_identifier); // Update taskId with received identifier
+        setTaskId(data.task_identifier);
       }
     });
+
     newSocket.on('updated', (data) => {
       console.log('Updated--->:', data);
     });
 
-    // Listen for the your_tasks event
     newSocket.on('your_tasks', (data) => {
       console.log('Received updated set of my tasks', data);
       if (data && data.tasks) {
-        setTasks(data.tasks); // Update tasks state
+        setTasks(data.tasks);
       }
     });
 
+    newSocket.on('service_is_ready_to_receive_heavy_payload', (data) => {
+      console.log('Service is trully ready to receive your payload, press or whatever...')
+
+    })
+
     setSocket(newSocket);
 
-    // Cleanup on component unmount
     return () => {
       newSocket.disconnect();
     };
@@ -56,12 +108,32 @@ const TaskCreator = () => {
 
   const handlePushTask = () => {
     if (socket && clientId && taskData) {
-      const taskPayload = { client_id: clientId, task_data: taskData };
-      socket.emit('push_task', clientId, { task: taskData });
+      let parsedTaskData;
+      try {
+        // Parse taskData only if it's a string
+        parsedTaskData = typeof taskData === 'string' ? JSON.parse(taskData) : taskData;
+
+        // Ensure taskData is an object
+        if (typeof parsedTaskData === 'object' && parsedTaskData !== null) {
+          // Force a heavy_load task
+          parsedTaskData.task_type = "heavy_load";
+          parsedTaskData.data = "Data needs to be streamed on pull request";
+        } else {
+          console.error('taskData is not a valid object');
+          return;
+        }
+      } catch (err) {
+        console.error('Cannot parse content to add heavy_load property', err);
+        return; // Stop further execution if parsing fails
+      }
+
+      // Emit the task data with the heavy_load property
+      socket.emit('push_task', { task: parsedTaskData });
     } else {
       alert('Please provide a client ID and task data.');
     }
   };
+
 
   return (
     <Box sx={{ p: 3, maxWidth: 800, mx: 'auto', textAlign: 'center' }}>
@@ -124,27 +196,36 @@ const TaskCreator = () => {
                 Task ID: {task.task_id}
               </Typography>
               <Typography variant="body2" color="textSecondary">
-                Client ID: {task.client_id}
+                Owned-By {task.token}
               </Typography>
               <Typography variant="body2" color="textSecondary">
                 State: {task.state}
               </Typography>
 
-              {/* Display Progress */}
+              {/* Display Progress or Processed */}
               <Box sx={{ mt: 2 }}>
-                <Typography variant="body2" color="textSecondary">
-                  Progress: {task.progress}%
-                </Typography>
-                <LinearProgress
-                  variant="determinate"
-                  value={task.progress}
-                  sx={{ height: 10, borderRadius: 5 }}
-                />
+                {task.processed ? (
+                  <Typography variant="body2" color="textSecondary">
+                    Processed
+                  </Typography>
+                ) : (
+                  <>
+                    <Typography variant="body2" color="textSecondary">
+                      Progress: {task.progress}%
+                    </Typography>
+                    <LinearProgress
+                      variant="determinate"
+                      value={task.progress}
+                      sx={{ height: 10, borderRadius: 5 }}
+                    />
+                  </>
+                )}
               </Box>
             </Box>
           </Grid>
         ))}
       </Grid>
+
     </Box>
   );
 };

@@ -12,10 +12,26 @@ const TaskConsumer = () => {
   useEffect(() => {
     // Connect to the Socket.IO server
     // Connect to the Socket.IO server with authentication
-    const socket = io('wss://netofcomputers.com:4999', {
+    // Connect to the Socket.IO server with authentication
+
+    /**
+     * This is the fake task puller,
+     * it is a worker with services
+     * a worker has the service keys = what services it offers
+     * priority that will be used later
+     * compute status
+     * max ram, cpu, temp etc EVERYTHING IS COMMING AT THE END
+     * and too EACH SERVICE has a lot of params
+     *  maximum per service
+     *  isasync
+     *  estimatedCostPerTask
+     * 
+     * Important is to be able to pull a task fake process it sending progress feedback
+     */
+    const newSocket = io('wss://netofcomputers.com:5113', {
       transports: ['websocket'], // Ensure WebSocket transport
       auth: {
-        token: 'your-auth-token-here', // Replace with your actual token
+        token: 'gAAAAABniRtNF9yC1vKcMXIbKxjusqQpJ3tkvapaYlnaWFv3LDGx6sajuePuJdgwUHH7dlzIFsYKSXp9bdim7vJBvIDxLucNcIH3XUiFZBbuBHrVhPAplNkLxtB6m313ytTeuJv5Be78e3E0fGwqs7wEVAPAjf-C2nvsQxzDShcF4BSHv1iXKUNu0Ay5vMfGiO2CY-ECCAho0L4S8aT5Yr65egy6RwZV1Q==',
       },
     });
     // // Register this client as a controller
@@ -38,24 +54,49 @@ const TaskConsumer = () => {
       console.log('Disconnected from server.');
     });
 
-    // Listen for the task_pushed event
-    newSocket.on('task_pushed', (data) => {
-      console.log('Task pushed event received:', data);
-      if (data && data.task_identifier) {
-        setTaskId(data.task_identifier); // Update taskId with received identifier
-      }
-    });
-    newSocket.on('updated', (data) => {
-      console.log('Updated--->:', data);
+    newSocket.on('begin_process', (task) => {
+      console.log('processing task', task);
+
+      let progress = 0; // Initialize the progress value
+
+      // Set an interval to increment the progress every 5 seconds
+      const interval = setInterval(() => {
+        progress += 20; // Increment the progress by 5
+        task.progress = progress; // Update the task's progress
+
+        console.log(`Task progress: ${task.progress}%`);
+        newSocket.emit('update_task', task)
+        // If progress reaches or exceeds 100, clear the interval
+        if (progress >= 100) {
+          clearInterval(interval);
+          console.log('Task complete');
+          task.processed=true
+          task.pulled=true
+          task.state="Ended"
+          newSocket.emit('task_ended', task)
+        }
+      }, 500); // 5000ms = 5 seconds
     });
 
-    // Listen for the your_tasks event
-    newSocket.on('your_tasks', (data) => {
-      console.log('Received updated set of my tasks', data);
-      if (data && data.tasks) {
-        setTasks(data.tasks); // Update tasks state
-      }
-    });
+
+    // // Listen for the task_pushed event
+    // newSocket.on('task_pushed', (data) => {
+    //   console.log('Task pushed event received:', data);
+    //   if (data && data.task_identifier) {
+    //     setTaskId(data.task_identifier); // Update taskId with received identifier
+    //   }
+    // });
+    // newSocket.on('updated', (data) => {
+    //   console.log('Updated--->:', data);
+    // });
+
+    // // Listen for the your_tasks event
+    // newSocket.on('your_tasks', (data) => {
+    //   console.log('Received updated set of my tasks', data);
+    //   if (data && data.tasks) {
+    //     setTasks(data.tasks); // Update tasks state
+    //   }
+    // });
 
     setSocket(newSocket);
 
@@ -66,12 +107,10 @@ const TaskConsumer = () => {
   }, []);
 
   const handlePushTask = () => {
-    if (socket && clientId && taskData) {
-      const taskPayload = { client_id: clientId, task_data: taskData };
-      socket.emit('push_task', clientId, { task: taskData });
-    } else {
-      alert('Please provide a client ID and task data.');
-    }
+
+    let taskId = ''
+    socket.emit('pull_task', taskId);
+
   };
 
   return (
@@ -105,7 +144,7 @@ const TaskConsumer = () => {
         sx={{ mt: 2 }}
         onClick={handlePushTask}
       >
-        Push Task
+        Pull Task
       </Button>
 
       {taskId && (

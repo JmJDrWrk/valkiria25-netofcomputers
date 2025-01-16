@@ -5,7 +5,7 @@ import { AppBar, Toolbar, Typography, Button, Grid, Card, CardContent, Container
 
 
 import INDEX from '.'
-import TaskConsumer from './taskPuller';
+// import TaskConsumer from './taskPuller';
 
 
 // Create the theme with black and white colors
@@ -47,7 +47,7 @@ function miniroutes() {
                 <Routes>
 
                     <Route path="/" element={<INDEX />} />
-                    <Route path="/pull" element={<TaskConsumer />} />
+                    {/* <Route path="/pull" element={<TaskConsumer />} /> */}
                     {/* <Route path="/home" element={<Home />} />
                 <Route path="/home/services" element={<Services />} /> */}
                 </Routes>
