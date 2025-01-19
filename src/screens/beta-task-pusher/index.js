@@ -7,59 +7,15 @@ const TaskCreator = () => {
   const [clientId, setClientId] = useState('');
   const [taskData, setTaskData] = useState('');
   const [taskId, setTaskId] = useState(null);
-  const [tasks, setTasks] = useState([]); // New state to hold the tasks
-
-  // useEffect(() => {
-  //   // Connect to the Socket.IO server with authentication
-  //   const newSocket = io('wss://netofcomputers.com:5113', {
-  //     transports: ['websocket'], // Ensure WebSocket transport
-  //     auth: {
-  //       token: 'gAAAAABniOc-qhDKELOVssGMyvQ1OmTkciDaUKCpXv3cR4mtWoLOcxUFE3yz4dXabsIeNiKyrlgqRbUyKMCJ1dnCb_a0A8JCixhxjR6l-wMIa2wwmKSbiBe5li-L4HboixS1XYQygS5Y',
-  //     },
-  //   });
-
-
-  //   newSocket.on('connect', () => {
-  //     console.log('Connected to server with SID:', newSocket.id);
-  //   });
-
-  //   newSocket.on('disconnect', () => {
-  //     console.log('Disconnected from server.');
-  //   });
-
-  //   // Listen for the task_pushed event
-  //   newSocket.on('task_pushed', (data) => {
-  //     console.log('Task pushed event received:', data);
-  //     if (data && data.task_identifier) {
-  //       setTaskId(data.task_identifier); // Update taskId with received identifier
-  //     }
-  //   });
-  //   newSocket.on('updated', (data) => {
-  //     console.log('Updated--->:', data);
-  //   });
-
-  //   // Listen for the your_tasks event
-  //   newSocket.on('your_tasks', (data) => {
-  //     console.log('Received updated set of my tasks', data);
-  //     if (data && data.tasks) {
-  //       setTasks(data.tasks); // Update tasks state
-  //     }
-  //   });
-
-  //   setSocket(newSocket);
-
-  //   // Cleanup on component unmount
-  //   return () => {
-  //     newSocket.disconnect();
-  //   };
-  // }, []);
+  const [tasks, setTasks] = useState([]);
+  const [file, setFile] = useState(null); // State to hold the selected file
 
   useEffect(() => {
     const newSocket = io('wss://netofcomputers.com:5113', {
       transports: ['websocket'],
       auth: { token: 'gAAAAABniRf4hefWUhPluLlK5_Vwgkp-PgKFLniAJJNLTOF0oQGqNr9xbK-pxFwHE0XhQXVtV77P_VnCnUx7-Y7cbAwVNDZtKK5RJTsxh4YKZ4BRi48zsXTys1CMyjUi0u821W9FQvvlGPg4xGtvAMlsUabO6mDmMwTq0QR3DtvnJQNchLnsA2TQOU7g3Z6wU7Iwv0id8PrP' },
-      reconnectionAttempts: 5,  // Allow up to 5 reconnection attempts
-      reconnectionDelay: 1000,  // 1 second delay between attempts
+      reconnectionAttempts: 5,
+      reconnectionDelay: 1000,
     });
 
     newSocket.on('connect', () => {
@@ -69,71 +25,103 @@ const TaskCreator = () => {
     newSocket.on('disconnect', (reason) => {
       console.log('Disconnected from server due to:', reason);
     });
-
-    // Handle reconnection failure
-    newSocket.on('reconnect_failed', () => {
-      console.error('Reconnection attempts failed.');
-      alert('Failed to reconnect to the server.');
+    newSocket.on('update_now', (data) => {
+      console.log('update is requested by server!')
+      sio.emit('my_tasks')
     });
-
-    newSocket.on('task_pushed', (data) => {
-      console.log('Task pushed event received:', data);
-      if (data && data.task_identifier) {
-        setTaskId(data.task_identifier);
-      }
-    });
-
-    newSocket.on('updated', (data) => {
-      console.log('Updated--->:', data);
-    });
-
     newSocket.on('your_tasks', (data) => {
       console.log('Received updated set of my tasks', data);
       if (data && data.tasks) {
         setTasks(data.tasks);
       }
     });
-
+    // Listen for service readiness
     newSocket.on('service_is_ready_to_receive_heavy_payload', (data) => {
-      console.log('Service is trully ready to receive your payload, press or whatever...')
-
-    })
+      console.log('Service is ready to receive payload:', data);
+      if (file) {
+        sendFile(newSocket, file, data);
+      } else {
+        console.warn('No file selected to send!');
+      }
+    });
 
     setSocket(newSocket);
 
     return () => {
       newSocket.disconnect();
     };
-  }, []);
+  }, [file]); // Rerun effect if the file changes
+
+  const sendFile = (socket, file, task) => {
+    const CHUNK_SIZE = 1024 * 512; // 1 MB per chunk
+    const totalChunks = Math.ceil(file.size / CHUNK_SIZE);
+
+    const reader = new FileReader();
+    let currentChunk = 0;
+
+    reader.onload = (event) => {
+      const chunkData = {
+        task,
+        chunkNumber: currentChunk,
+        totalChunks,
+        file_name: file.name,
+        file_type: file.type,
+        data: event.target.result, // Binary data
+      };
+
+      socket.emit('push_task_data', chunkData);
+      // Calculate the upload progress
+      const progressUpload = Math.round((currentChunk / totalChunks) * 100);
+
+      // Update the specific task's progress_upload
+      setTasks((prevTasks) =>
+        prevTasks.map((t) =>
+          t.task_id === task.task_id ? { ...t, progress_upload: progressUpload } : t
+        )
+      );
+      console.log(`Sent chunk ${currentChunk + 1} of ${totalChunks}`, chunkData);
+
+      currentChunk++;
+      if (currentChunk < totalChunks) {
+        readNextChunk();
+      } else {
+        console.log('File transfer complete. end_pushing_data');
+        task.file_name = file.name
+        task.file_type = file.type
+        socket.emit('end_pushing_data', task);
+      }
+    };
+
+    const readNextChunk = () => {
+      const start = currentChunk * CHUNK_SIZE;
+      const end = Math.min(file.size, start + CHUNK_SIZE);
+      reader.readAsArrayBuffer(file.slice(start, end));
+    };
+
+    readNextChunk();
+  };
+
+  const handleRefresh = () => {
+    socket.emit('my_tasks');
+  }
 
   const handlePushTask = () => {
     if (socket && clientId && taskData) {
       let parsedTaskData;
       try {
-        // Parse taskData only if it's a string
         parsedTaskData = typeof taskData === 'string' ? JSON.parse(taskData) : taskData;
-
-        // Ensure taskData is an object
-        if (typeof parsedTaskData === 'object' && parsedTaskData !== null) {
-          // Force a heavy_load task
-          parsedTaskData.task_type = "heavy_load";
-          parsedTaskData.data = "Data needs to be streamed on pull request";
-        } else {
-          console.error('taskData is not a valid object');
-          return;
-        }
+        parsedTaskData.task_type = 'heavy_load';
+        parsedTaskData.data = 'Data will be streamed.';
       } catch (err) {
-        console.error('Cannot parse content to add heavy_load property', err);
-        return; // Stop further execution if parsing fails
+        console.error('Error parsing task data:', err);
+        return;
       }
 
-      // Emit the task data with the heavy_load property
       socket.emit('push_task', { task: parsedTaskData });
     } else {
       alert('Please provide a client ID and task data.');
     }
   };
-
 
   return (
     <Box sx={{ p: 3, maxWidth: 800, mx: 'auto', textAlign: 'center' }}>
@@ -141,7 +129,6 @@ const TaskCreator = () => {
         Task Creator
       </Typography>
 
-      {/* Task Input Form */}
       <TextField
         label="Client ID"
         variant="outlined"
@@ -160,21 +147,24 @@ const TaskCreator = () => {
         value={taskData}
         onChange={(e) => setTaskData(e.target.value)}
       />
-      <Button
-        variant="contained"
-        color="primary"
-        sx={{ mt: 2 }}
-        onClick={handlePushTask}
-      >
+      <Button variant="contained" color="primary" sx={{ mt: 2 }} onClick={handlePushTask}>
         Push Task
       </Button>
+      <Button variant="contained" color="primary" sx={{ mt: 2 }} onClick={handleRefresh}>
+        Refresh
+      </Button>
 
-      {taskId && (
-        <Typography variant="body1" sx={{ mt: 2 }}>
-          Task pushed successfully! Task ID: <strong>{taskId}</strong>
-        </Typography>
-      )}
-
+      <Box sx={{ mt: 3 }}>
+        <input
+          type="file"
+          onChange={(e) => setFile(e.target.files[0])}
+        />
+        {file && (
+          <Typography variant="body1" sx={{ mt: 2 }}>
+            Selected file: {file.name} ({(file.size / 1024 / 1024).toFixed(2)} MB)
+          </Typography>
+        )}
+      </Box>
       {/* Display Tasks */}
       <Typography variant="h5" sx={{ mt: 4 }} gutterBottom>
         My Tasks
@@ -220,6 +210,26 @@ const TaskCreator = () => {
                     />
                   </>
                 )}
+
+              </Box>
+              <Box sx={{ mt: 2 }}>
+                {task.processed ? (
+                  <Typography variant="body2" color="textSecondary">
+                    Processed
+                  </Typography>
+                ) : (
+                  <>
+                    <Typography variant="body2" color="textSecondary">
+                      Progress: {task.progress_upload}%
+                    </Typography>
+                    <LinearProgress
+                      variant="determinate"
+                      value={task.progress_upload}
+                      sx={{ height: 10, borderRadius: 5 }}
+                    />
+                  </>
+                )}
+
               </Box>
             </Box>
           </Grid>
