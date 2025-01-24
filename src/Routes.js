@@ -12,6 +12,7 @@ import GuitarTunerProject from './screens/guitar-tuner/miniroutes'
 import EcoFriendProject from './screens/eco-friend/miniroutes'
 import BetaTaskPusherProject from './screens/beta-task-pusher/miniroutes'
 import TaskConsumer from './screens/beta-task-pusher/taskPuller'
+import GuitarScalesProject from './screens/guitar-scales/miniroutes'
 
 
 function AppRoutes() {
@@ -31,6 +32,7 @@ function AppRoutes() {
         <Route path="/eco-friend" element={<EcoFriendProject/>} />
         <Route path="/beta-task-pusher" element={<BetaTaskPusherProject/>} />
         <Route path="/beta-task-pusher/pull" element={<TaskConsumer/>} />
+        <Route path="/guitar-scales" element={<GuitarScalesProject/>} />
 
       </Routes>
       {/* <Footer flexGrow={1} /> */}

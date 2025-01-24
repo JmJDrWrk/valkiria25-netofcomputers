@@ -27,7 +27,7 @@ const TaskCreator = () => {
     });
     newSocket.on('update_now', (data) => {
       console.log('update is requested by server!')
-      sio.emit('my_tasks')
+      newSocket.emit('my_tasks')
     });
     newSocket.on('your_tasks', (data) => {
       console.log('Received updated set of my tasks', data);
@@ -108,16 +108,20 @@ const TaskCreator = () => {
   const handlePushTask = () => {
     if (socket && clientId && taskData) {
       let parsedTaskData;
+      let __payload__ = {
+          
+      }
       try {
+
         parsedTaskData = typeof taskData === 'string' ? JSON.parse(taskData) : taskData;
-        parsedTaskData.task_type = 'heavy_load';
-        parsedTaskData.data = 'Data will be streamed.';
+        __payload__.task_type = 'heavy_load';
+        __payload__.data = parsedTaskData
       } catch (err) {
         console.error('Error parsing task data:', err);
         return;
       }
-
-      socket.emit('push_task', { task: parsedTaskData });
+      console.log('push_task', { task: __payload__ })
+      socket.emit('push_task', { task: __payload__ });
     } else {
       alert('Please provide a client ID and task data.');
     }
