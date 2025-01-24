@@ -2,83 +2,83 @@ import React, { useState } from 'react';
 import { Box, Typography, Grid, Button, TextField } from '@mui/material';
 // import Fretboard from './class/Fretboard'; // Adjust path as needed
 const NOTES = {
-  "C":{
-      'natural':'C'
+  "C": {
+    'natural': 'C'
   },
-  "C#":{
-      'natural':'C#'
+  "C#": {
+    'natural': 'C#'
   },
-  "Db":{
-      'natural':'C#'
+  "Db": {
+    'natural': 'C#'
   },
-  "D":{
-      'natural':'D'
+  "D": {
+    'natural': 'D'
   },
-  "D#":{
-      'natural':'D#'
+  "D#": {
+    'natural': 'D#'
   },
-  "Eb":{
-      'natural':'D#'
+  "Eb": {
+    'natural': 'D#'
   },
-  "E":{
-      'natural':'E'
+  "E": {
+    'natural': 'E'
   },
-  "F":{
-      'natural':'F'
+  "F": {
+    'natural': 'F'
   },
-  "F#":{
-      'natural':'F#'
+  "F#": {
+    'natural': 'F#'
   },
-  "Gb":{
-      'natural':'F#'
+  "Gb": {
+    'natural': 'F#'
   },
-  "G":{
-      'natural':'G'
+  "G": {
+    'natural': 'G'
   },
-  "G#":{
-      'natural':'G#'
+  "G#": {
+    'natural': 'G#'
   },
-  "Ab":{
-      'natural':'G#'
+  "Ab": {
+    'natural': 'G#'
   },
-  "A":{
-      'natural':'A'
+  "A": {
+    'natural': 'A'
   },
-  "A#":{
-      'natural':'A#'
+  "A#": {
+    'natural': 'A#'
   },
-  "Bb":{
-      'natural':'A#'
+  "Bb": {
+    'natural': 'A#'
   },
-  "B":{
-  'natural':'B'
+  "B": {
+    'natural': 'B'
   }
 }
 
 
 class GuitarString {
   constructor(openNote) {
-      this.openNote = NOTES[openNote]['natural'];
-      this.openNoteIndex = Object.keys(NOTES).indexOf(openNote); // Index of the open note
+    this.openNote = NOTES[openNote]['natural'];
+    this.openNoteIndex = Object.keys(NOTES).indexOf(openNote); // Index of the open note
   }
 
   sumSemitonesAndReturn(semitones) {
-      const notesKeys = Object.keys(NOTES); // List of all notes
-      const noteIndex = (this.openNoteIndex + semitones) % notesKeys.length; // Wrap around with modulo
-      return notesKeys[noteIndex];
+    const notesKeys = Object.keys(NOTES); // List of all notes
+    const noteIndex = (this.openNoteIndex + semitones) % notesKeys.length; // Wrap around with modulo
+    return notesKeys[noteIndex];
   }
 }
 
 class Fretboard {
   constructor(orderedGuitarStringsList) {
-      this.strings = orderedGuitarStringsList.map(note => new GuitarString(note));
+    this.strings = orderedGuitarStringsList.map(note => new GuitarString(note));
   }
 
   getNoteAtPositionForString(stringIndex, fretNum) {
-      if (stringIndex < 0 || stringIndex >= this.strings.length) {
-          throw new Error("Invalid string index");
-      }
-      return this.strings[stringIndex].sumSemitonesAndReturn(fretNum);
+    if (stringIndex < 0 || stringIndex >= this.strings.length) {
+      throw new Error("Invalid string index");
+    }
+    return this.strings[stringIndex].sumSemitonesAndReturn(fretNum);
   }
 
 }
@@ -121,9 +121,8 @@ const GuitarScales = () => {
     }
     return scale;
   };
-
   return (
-    <Box sx={{ p: 3, maxWidth: 800, mx: 'auto', textAlign: 'center' }}>
+    <Box sx={{ p: 3, maxWidth: '100%', mx: 'auto', textAlign: 'center' }}>
       <Typography variant="h4" gutterBottom>
         Guitar Scales
       </Typography>
@@ -149,28 +148,47 @@ const GuitarScales = () => {
       <Grid container spacing={1}>
         {fretboardData &&
           fretboardData.map((stringNotes, stringIndex) => (
-            <Grid item xs={12} key={stringIndex} sx={{ display: 'flex' }}>
-              {stringNotes.map((note, fretIndex) => (
-                <Box
-                  key={fretIndex}
-                  sx={{
-                    width: 30,
-                    height: 30,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    border: '1px solid #ccc',
-                    backgroundColor: note ? '#90caf9' : '#f5f5f5',
-                  }}
-                >
-                  {note}
-                </Box>
-              ))}
+            <Grid item xs={12} key={stringIndex} sx={{ display: 'flex', justifyContent: 'center' }}>
+              {stringNotes.map((note, fretIndex) => {
+                const fretWidth = `${(100 / (TOTAL_FRETS + 1)) * (TOTAL_FRETS - fretIndex)}%`; // Dynamic width calculation
+                return (
+                  <Box
+                    key={fretIndex}
+                    sx={{
+                      width: '50px', // Make width relative to the total available width
+                      height: 50,  // Increased height for better visual representation
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      border: '1px solid #ddd',
+                      backgroundColor: note ? (fretIndex === 0 ? '#ffcc80' : '#64b5f6') : '#f0f0f0',
+                      borderRadius: '5px',
+                      boxShadow: note ? '0px 4px 6px rgba(0, 0, 0, 0.1)' : 'none',
+                      transition: 'background-color 0.3s, box-shadow 0.3s',
+                      cursor: note ? 'pointer' : 'default',
+                      marginLeft: fretIndex === 0 ? 0 : '3px', // Small margin for spacing between frets
+                    }}
+                    title={note || 'Fret'}
+                  >
+                    <Typography
+                      variant="body2"
+                      sx={{
+                        fontWeight: note ? 'bold' : 'normal',
+                        color: note ? '#ffffff' : '#9e9e9e',
+                      }}
+                    >
+                      {note}
+                    </Typography>
+                  </Box>
+                );
+              })}
             </Grid>
           ))}
       </Grid>
     </Box>
   );
+
+
 };
 
 export default GuitarScales;
