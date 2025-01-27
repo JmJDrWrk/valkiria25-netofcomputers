@@ -94,11 +94,11 @@ const GuitarScales = () => {
 
   const handleGenerateFretboard = () => {
     const fretboard = new Fretboard(STANDARD_TUNING);
-    const scale = generateScale(startingNote, scaleType);
+    // const scale = generateScale(startingNote, scaleType);
+    const scale = getScales(startingNote)[scaleType]
     setScaleNotes(scale);
 
     // Highlight notes on the fretboard for the chosen scale
-
     function getNextNotes(startingNote, scale, count = 22) {
       const NOTES = [
         'C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'
@@ -119,7 +119,7 @@ const GuitarScales = () => {
         if (scale.includes(note)) {
           return note
         }else{
-          return ""
+          return false
         }
       });
     }
@@ -132,6 +132,7 @@ const GuitarScales = () => {
     console.log('s', showable_notes_per_string)
     setFretboardData(showable_notes_per_string);
   };
+
   // Function to calculate major and minor scales based on the root note
   function getScales(rootNote) {
     const allNotes = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
@@ -277,12 +278,13 @@ const GuitarScales = () => {
                         justifyContent: 'center',
                         border: '1px solid #ddd',
                         backgroundColor: note ? (fretIndex === 0 ? '#ffcc80' : '#64b5f6') : '#f0f0f0',
-                        borderRadius: '5px',
+                        borderRadius: '30px',
                         boxShadow: note ? '0px 4px 6px rgba(0, 0, 0, 0.1)' : 'none',
                         transition: 'background-color 0.3s, box-shadow 0.3s',
                         cursor: note ? 'pointer' : 'default',
                         marginLeft: fretIndex === 0 ? 0 : `${Math.log(TOTAL_FRETS - fretIndex + 1) * 5}px`, // Logarithmic spacing
                         // position: 'relative'
+                        opacity: note ? 1 : 0, // Opacity set to 100% if note is present, 20% if not
                       }}
                       title={note || 'Fret'}
                     >
