@@ -1,0 +1,37 @@
+/* Apply a top border to the first row */
+#string-0 {
+    border-top: 2px solid black;
+}
+
+/* Apply a bottom border to the last row */
+#string-5 {
+    /* Adjust this if you have more or fewer rows */
+    border-bottom: 2px solid black;
+}
+
+/* Apply side borders to all rows */
+[id^="string-"] {
+    border-left: 2px solid black;
+    border-right: 2px solid black;
+    border-bottom: 2px solid black;
+}
+
+
+/* Style for all fret boxes */
+.fret {
+    border-right: 2px solid black;
+    margin-left: 8px;
+    position: relative;
+    top: 0px;
+    height: 62px;
+    /* Simulates the fret wire */
+}
+
+/* Remove border-right for the last fret */
+.fret:last-child {
+    border-right: none;
+}
+
+.fretboardNote {
+    
+}

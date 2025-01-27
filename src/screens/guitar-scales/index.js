@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Box, Typography, Grid, Button, TextField } from '@mui/material';
+import './fretboard.css'
 // import Fretboard from './class/Fretboard'; // Adjust path as needed
 const NOTES = {
   "C": {
@@ -88,8 +89,8 @@ const GuitarScales = () => {
   const [scaleType, setScaleType] = useState('major'); // Default scale type
   const [fretboardData, setFretboardData] = useState(null);
 
-  const STANDARD_TUNING = ['E', 'A', 'D', 'G', 'B', 'E']; // Standard tuning
-  const TOTAL_FRETS = 12;
+  const STANDARD_TUNING = ['E', 'B', 'G', 'D', 'A', 'E']; // Standard tuning
+  const TOTAL_FRETS = 22;
 
   const handleGenerateFretboard = () => {
     const fretboard = new Fretboard(STANDARD_TUNING);
@@ -122,7 +123,7 @@ const GuitarScales = () => {
     return scale;
   };
   return (
-    <Box sx={{ p: 3, maxWidth: '100%', mx: 'auto', textAlign: 'center' }}>
+    <Box sx={{ p: 3, maxWidth: '100%', textAlign: 'center', overflowX: 'auto' }} id="ThisVeryComponent">
       <Typography variant="h4" gutterBottom>
         Guitar Scales
       </Typography>
@@ -148,38 +149,61 @@ const GuitarScales = () => {
       <Grid container spacing={1}>
         {fretboardData &&
           fretboardData.map((stringNotes, stringIndex) => (
-            <Grid item xs={12} key={stringIndex} sx={{ display: 'flex', justifyContent: 'center' }}>
+            <Grid item key={stringIndex}
+              sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                // backgroundColor: 'red',
+                width: '100%',
+                justifyContent: 'space-evenly',
+                paddingTop:'0px !important',
+                alignItems: 'center'
+                // paddingBottom: '10px',
+              }}
+              id={`string-${stringIndex}`}>
               {stringNotes.map((note, fretIndex) => {
                 const fretWidth = `${(100 / (TOTAL_FRETS + 1)) * (TOTAL_FRETS - fretIndex)}%`; // Dynamic width calculation
                 return (
-                  <Box
-                    key={fretIndex}
-                    sx={{
-                      width: '50px', // Make width relative to the total available width
-                      height: 50,  // Increased height for better visual representation
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      border: '1px solid #ddd',
-                      backgroundColor: note ? (fretIndex === 0 ? '#ffcc80' : '#64b5f6') : '#f0f0f0',
-                      borderRadius: '5px',
-                      boxShadow: note ? '0px 4px 6px rgba(0, 0, 0, 0.1)' : 'none',
-                      transition: 'background-color 0.3s, box-shadow 0.3s',
-                      cursor: note ? 'pointer' : 'default',
-                      marginLeft: fretIndex === 0 ? 0 : '3px', // Small margin for spacing between frets
+                  <>
+                    <Box sx={{
+
                     }}
-                    title={note || 'Fret'}
-                  >
-                    <Typography
-                      variant="body2"
+                      className="fret"></Box>
+                    <Box
+                      key={fretIndex}
+                      className={"fretboardNote"}
                       sx={{
-                        fontWeight: note ? 'bold' : 'normal',
-                        color: note ? '#ffffff' : '#9e9e9e',
+                        width: '35px', // Fixed width for each note
+                        height: 35,  // Height for visual representation
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        border: '1px solid #ddd',
+                        backgroundColor: note ? (fretIndex === 0 ? '#ffcc80' : '#64b5f6') : '#f0f0f0',
+                        borderRadius: '5px',
+                        boxShadow: note ? '0px 4px 6px rgba(0, 0, 0, 0.1)' : 'none',
+                        transition: 'background-color 0.3s, box-shadow 0.3s',
+                        cursor: note ? 'pointer' : 'default',
+                        marginLeft: fretIndex === 0 ? 0 : `${Math.log(TOTAL_FRETS - fretIndex + 1) * 5}px`, // Logarithmic spacing
+                        // position: 'relative'
                       }}
+                      title={note || 'Fret'}
                     >
-                      {note}
-                    </Typography>
-                  </Box>
+                      <Typography
+                        variant="body2"
+                        sx={{
+                          fontWeight: note ? 'bold' : 'normal',
+                          color: note ? '#ffffff' : '#9e9e9e',
+                        }}
+                      >
+                        {note}
+                         {/* {fretIndex} */}
+                      </Typography>
+                    </Box>
+                  </>
+
+
+
                 );
               })}
             </Grid>
