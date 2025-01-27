@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Typography, Grid, Button, TextField } from '@mui/material';
+import { Box, Typography, Grid, Button, TextField, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
 import './fretboard.css'
 // import Fretboard from './class/Fretboard'; // Adjust path as needed
 const NOTES = {
@@ -108,7 +108,7 @@ const GuitarScales = () => {
     setFretboardData(fretboardWithNotes);
   };
 
-  const generateScale = (root, type) => {
+  /*const generateScale = (root, type) => {
     // Example: Simple major scale intervals
     const majorScaleIntervals = [2, 2, 1, 2, 2, 2, 1]; // Whole-Whole-Half-Whole-Whole-Whole-Half
     const notes = Object.keys(NOTES);
@@ -121,7 +121,40 @@ const GuitarScales = () => {
       scale.push(notes[currentIndex]);
     }
     return scale;
+  }; */
+  //WHERE ROOT CAN BE ONE FROM C to B and type major/minor/pentatonic
+  const generateScale = (root, type) => {
+    const majorScaleIntervals = [2, 2, 1, 2, 2, 2, 1];
+    const minorScaleIntervals = [2, 1, 2, 2, 1, 2, 2];
+    const pentatonicScaleIntervals = [3, 2, 2, 3, 2];  // Major Pentatonic
+
+    const notes = Object.keys(NOTES);
+    const rootIndex = notes.indexOf(root);
+    const scale = [root];
+    let currentIndex = rootIndex;
+
+    let intervals = [];
+    switch (type) {
+      case 'major':
+        intervals = majorScaleIntervals;
+        break;
+      case 'minor':
+        intervals = minorScaleIntervals;
+        break;
+      case 'pentatonic':
+        intervals = pentatonicScaleIntervals;
+        break;
+      default:
+        intervals = majorScaleIntervals;  // Default to major scale
+    }
+
+    for (let interval of intervals) {
+      currentIndex = (currentIndex + interval) % notes.length;
+      scale.push(notes[currentIndex]);
+    }
+    return scale;
   };
+
   return (
     <Box sx={{ p: 3, maxWidth: '100%', textAlign: 'center', overflowX: 'auto' }} id="ThisVeryComponent">
       <Typography variant="h4" gutterBottom>
@@ -135,12 +168,23 @@ const GuitarScales = () => {
           onChange={(e) => setStartingNote(e.target.value.toUpperCase())}
           sx={{ mr: 2, width: 120 }}
         />
-        <TextField
+        {/* <TextField
           label="Scale Type"
           value={scaleType}
           onChange={(e) => setScaleType(e.target.value.toLowerCase())}
           sx={{ mr: 2, width: 120 }}
-        />
+        /> */}
+        <FormControl sx={{ mr: 2, width: 120 }}>
+          <InputLabel>Scale Type</InputLabel>
+          <Select
+            value={scaleType}
+            onChange={(e) => setScaleType(e.target.value)}
+          >
+            <MenuItem value="major">Major</MenuItem>
+            <MenuItem value="minor">Minor</MenuItem>
+            <MenuItem value="pentatonic">Pentatonic</MenuItem>
+          </Select>
+        </FormControl>
         <Button variant="contained" onClick={handleGenerateFretboard}>
           Generate
         </Button>
@@ -156,7 +200,7 @@ const GuitarScales = () => {
                 // backgroundColor: 'red',
                 width: '100%',
                 justifyContent: 'space-evenly',
-                paddingTop:'0px !important',
+                paddingTop: '0px !important',
                 alignItems: 'center'
                 // paddingBottom: '10px',
               }}
@@ -197,7 +241,7 @@ const GuitarScales = () => {
                         }}
                       >
                         {note}
-                         {/* {fretIndex} */}
+                        {/* {fretIndex} */}
                       </Typography>
                     </Box>
                   </>
