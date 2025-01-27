@@ -98,14 +98,39 @@ const GuitarScales = () => {
     setScaleNotes(scale);
 
     // Highlight notes on the fretboard for the chosen scale
-    const fretboardWithNotes = STANDARD_TUNING.map((stringNote, stringIndex) => {
-      return Array.from({ length: TOTAL_FRETS }, (_, fret) => {
-        const note = fretboard.getNoteAtPositionForString(stringIndex, fret);
-        return scale.includes(note) ? note : ''; // Show note if in scale, else empty
-      });
-    });
 
-    setFretboardData(fretboardWithNotes);
+    function getNextNotes(startingNote, scale, count = 22) {
+      const NOTES = [
+        'C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'
+      ];
+
+      const startIndex = NOTES.indexOf(startingNote);
+      if (startIndex === -1) {
+        throw new Error("Invalid starting note");
+      }
+
+      const notes = [];
+      for (let i = 0; i < count; i++) {
+        const index = (startIndex + i) % NOTES.length; // Use modulo to loop back after 12 notes
+        notes.push(NOTES[index]);
+      }
+
+      return notes.map(note => {
+        if (scale.includes(note)) {
+          return note
+        }else{
+          return ""
+        }
+      });
+    }
+
+
+    const showable_notes_per_string = STANDARD_TUNING.map(eachNote => {
+      return getNextNotes(eachNote, scale)
+    })
+
+    console.log('s', showable_notes_per_string)
+    setFretboardData(showable_notes_per_string);
   };
   // Function to calculate major and minor scales based on the root note
   function getScales(rootNote) {
@@ -150,12 +175,12 @@ const GuitarScales = () => {
     const majorScaleIntervals = [2, 2, 1, 2, 2, 2, 1];
     const minorScaleIntervals = [2, 1, 2, 2, 1, 2, 2];
     const pentatonicScaleIntervals = [3, 2, 2, 3, 2]; // Major Pentatonic
-    
+
     const notes = Object.keys(NOTES);
     const rootIndex = notes.indexOf(root);
     const scale = [root];
     let currentIndex = rootIndex;
-    
+
     let intervals = [];
     switch (type) {
       case 'major':
@@ -170,18 +195,18 @@ const GuitarScales = () => {
       default:
         intervals = majorScaleIntervals; // Default to major scale
     }
-  
+
     // Loop through the intervals and build the scale
     for (let interval of intervals) {
       currentIndex = (currentIndex + interval) % notes.length; // Ensure we stay within bounds of notes array
       scale.push(notes[currentIndex]);
     }
-  
+
     // Return the complete scale
     console.log('scale', scale)
     return scale;
   };
-  
+
 
   return (
     <Box sx={{ p: 3, maxWidth: '100%', textAlign: 'center', overflowX: 'auto' }} id="ThisVeryComponent">
