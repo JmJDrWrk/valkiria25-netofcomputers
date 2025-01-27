@@ -107,6 +107,27 @@ const GuitarScales = () => {
 
     setFretboardData(fretboardWithNotes);
   };
+  // Function to calculate major and minor scales based on the root note
+  function getScales(rootNote) {
+    const allNotes = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
+    // Intervals for major and minor scales (in semitones)
+    const majorIntervals = [2, 4, 5, 7, 9, 11, 12]; // Major scale pattern
+    const minorIntervals = [2, 3, 5, 7, 8, 10, 12]; // Minor scale pattern
+
+    // Find the index of the root note in the allNotes array
+    const rootIndex = allNotes.indexOf(rootNote);
+
+    // Generate the major scale
+    const majorScale = majorIntervals.map(interval => allNotes[(rootIndex + interval) % 12]);
+
+    // Generate the minor scale
+    const minorScale = minorIntervals.map(interval => allNotes[(rootIndex + interval) % 12]);
+
+    return {
+      major: majorScale,
+      minor: minorScale
+    };
+  }
 
   /*const generateScale = (root, type) => {
     // Example: Simple major scale intervals
@@ -124,15 +145,17 @@ const GuitarScales = () => {
   }; */
   //WHERE ROOT CAN BE ONE FROM C to B and type major/minor/pentatonic
   const generateScale = (root, type) => {
+    console.log('SCALE', getScales(root))
+    return getScales(root)['major']
     const majorScaleIntervals = [2, 2, 1, 2, 2, 2, 1];
     const minorScaleIntervals = [2, 1, 2, 2, 1, 2, 2];
-    const pentatonicScaleIntervals = [3, 2, 2, 3, 2];  // Major Pentatonic
-
+    const pentatonicScaleIntervals = [3, 2, 2, 3, 2]; // Major Pentatonic
+    
     const notes = Object.keys(NOTES);
     const rootIndex = notes.indexOf(root);
     const scale = [root];
     let currentIndex = rootIndex;
-
+    
     let intervals = [];
     switch (type) {
       case 'major':
@@ -145,15 +168,20 @@ const GuitarScales = () => {
         intervals = pentatonicScaleIntervals;
         break;
       default:
-        intervals = majorScaleIntervals;  // Default to major scale
+        intervals = majorScaleIntervals; // Default to major scale
     }
-
+  
+    // Loop through the intervals and build the scale
     for (let interval of intervals) {
-      currentIndex = (currentIndex + interval) % notes.length;
+      currentIndex = (currentIndex + interval) % notes.length; // Ensure we stay within bounds of notes array
       scale.push(notes[currentIndex]);
     }
+  
+    // Return the complete scale
+    console.log('scale', scale)
     return scale;
   };
+  
 
   return (
     <Box sx={{ p: 3, maxWidth: '100%', textAlign: 'center', overflowX: 'auto' }} id="ThisVeryComponent">
