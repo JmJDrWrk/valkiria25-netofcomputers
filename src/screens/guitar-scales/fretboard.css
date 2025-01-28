@@ -26,6 +26,16 @@
     height: 62px;
     /* Simulates the fret wire */
 }
+.unvisiblefret {
+    border-right: 2px solid black;
+    margin-left: 8px;
+    position: relative;
+    top: 0px;
+    height: 62px;
+    opacity: 0;
+    /* Simulates the fret wire */
+}
+
 
 /* Remove border-right for the last fret */
 .fret:last-child {
@@ -34,4 +44,30 @@
 
 .fretboardNote {
     
+}
+/* For all fretnums */
+[id^="fretNm-"] {
+    background-color: #ffffff !important;
+}
+[id^="fretNm-"] > p {
+    color: black !important;
+}
+#fretNm-3,
+#fretNm-5,
+#fretNm-7,
+#fretNm-10,
+#fretNm-12,
+#fretNm-15,
+#fretNm-17 {
+    background-color: black !important;
+}
+
+#fretNm-3 > p,
+#fretNm-5 > p,
+#fretNm-7 > p,
+#fretNm-10 > p,
+#fretNm-12 > p,
+#fretNm-15 > p,
+#fretNm-17 > p {
+    color: white !important;
 }

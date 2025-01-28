@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Typography, Grid, Button, TextField, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
+import { Box, Typography, Grid, Button, TextField, Select, MenuItem, FormControl, InputLabel, Menu } from '@mui/material';
 import './fretboard.css'
 // import Fretboard from './class/Fretboard'; // Adjust path as needed
 const NOTES = {
@@ -88,7 +88,7 @@ const GuitarScales = () => {
   const [startingNote, setStartingNote] = useState('E'); // Default starting note
   const [scaleType, setScaleType] = useState('major'); // Default scale type
   const [fretboardData, setFretboardData] = useState(null);
-
+  const [fretsData, setFretsData] = useState(null);
   const STANDARD_TUNING = ['E', 'B', 'G', 'D', 'A', 'E']; // Standard tuning
   const TOTAL_FRETS = 22;
 
@@ -96,6 +96,8 @@ const GuitarScales = () => {
     const fretboard = new Fretboard(STANDARD_TUNING);
     // const scale = generateScale(startingNote, scaleType);
     const scale = getScales(startingNote)[scaleType]
+
+
     setScaleNotes(scale);
 
     // Highlight notes on the fretboard for the chosen scale
@@ -118,8 +120,8 @@ const GuitarScales = () => {
       return notes.map(note => {
         if (scale.includes(note)) {
           return note
-        }else{
-          return false
+        } else {
+          return note
         }
       });
     }
@@ -129,8 +131,13 @@ const GuitarScales = () => {
       return getNextNotes(eachNote, scale)
     })
 
-    console.log('s', showable_notes_per_string)
+
+
+    let _data_ = [['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21']]
+    // .concat(showable_notes_per_string)
+    console.log('d', showable_notes_per_string)
     setFretboardData(showable_notes_per_string);
+    setFretsData(_data_)
   };
 
   // Function to calculate major and minor scales based on the root note
@@ -155,59 +162,39 @@ const GuitarScales = () => {
     };
   }
 
-  /*const generateScale = (root, type) => {
-    // Example: Simple major scale intervals
-    const majorScaleIntervals = [2, 2, 1, 2, 2, 2, 1]; // Whole-Whole-Half-Whole-Whole-Whole-Half
-    const notes = Object.keys(NOTES);
-    const rootIndex = notes.indexOf(root);
-    const scale = [root];
+  const handleNoteClick = (e) => {
+    let note = ''
+    console.log('e', e.target.id)
+    if (e.target.id == 'missclick') {
+      note = e.target.parentElement.id
+      console.log('note I ', e.target.parentElement.id)
 
-    let currentIndex = rootIndex;
-    for (let interval of majorScaleIntervals) {
-      currentIndex = (currentIndex + interval) % notes.length;
-      scale.push(notes[currentIndex]);
-    }
-    return scale;
-  }; */
-  //WHERE ROOT CAN BE ONE FROM C to B and type major/minor/pentatonic
-  const generateScale = (root, type) => {
-    console.log('SCALE', getScales(root))
-    return getScales(root)['major']
-    const majorScaleIntervals = [2, 2, 1, 2, 2, 2, 1];
-    const minorScaleIntervals = [2, 1, 2, 2, 1, 2, 2];
-    const pentatonicScaleIntervals = [3, 2, 2, 3, 2]; // Major Pentatonic
+      if (scaleNotes.includes(note)) {
+        e.target.parentElement.style.opacity = e.target.parentElement.style.opacity === '1' ? '1' : '1';
+        e.target.parentElement.style.backgroundColor = e.target.parentElement.style.backgroundColor == "rgb(80, 177, 104)" ?  '#64b5f6' : 'rgb(80, 177, 104)';
+      } else {
+        e.target.parentElement.style.opacity = e.target.parentElement.style.opacity === '1' ? '0' : '1';
+        e.target.parentElement.style.backgroundColor = 'rgb(177, 80, 80)';
+      }
 
-    const notes = Object.keys(NOTES);
-    const rootIndex = notes.indexOf(root);
-    const scale = [root];
-    let currentIndex = rootIndex;
+    } else {
+      note = e.target.id
+      console.log('note II ', e.target.id)
 
-    let intervals = [];
-    switch (type) {
-      case 'major':
-        intervals = majorScaleIntervals;
-        break;
-      case 'minor':
-        intervals = minorScaleIntervals;
-        break;
-      case 'pentatonic':
-        intervals = pentatonicScaleIntervals;
-        break;
-      default:
-        intervals = majorScaleIntervals; // Default to major scale
+      if (scaleNotes.includes(note)) {
+        e.target.style.opacity = e.target.style.opacity === '1' ? '1' : '1';
+        e.target.style.backgroundColor = e.target.style.backgroundColor == "rgb(80, 177, 104)" ?  '#64b5f6' : 'rgb(80, 177, 104)';
+      } else {
+        e.target.style.opacity = e.target.style.opacity === '1' ? '0' : '1';
+        e.target.style.backgroundColor = 'rgb(177, 80, 80)';
+      }
+
     }
 
-    // Loop through the intervals and build the scale
-    for (let interval of intervals) {
-      currentIndex = (currentIndex + interval) % notes.length; // Ensure we stay within bounds of notes array
-      scale.push(notes[currentIndex]);
-    }
 
-    // Return the complete scale
-    console.log('scale', scale)
-    return scale;
-  };
 
+
+  }
 
   return (
     <Box sx={{ p: 3, maxWidth: '100%', textAlign: 'center', overflowX: 'auto' }} id="ThisVeryComponent">
@@ -236,6 +223,7 @@ const GuitarScales = () => {
           >
             <MenuItem value="major">Major</MenuItem>
             <MenuItem value="minor">Minor</MenuItem>
+            <MenuItem value="empty">Empty</MenuItem>
             <MenuItem value="pentatonic">Pentatonic</MenuItem>
           </Select>
         </FormControl>
@@ -243,7 +231,74 @@ const GuitarScales = () => {
           Generate
         </Button>
       </Box>
+      {/* FRET NUMBERS */}
+      <Grid container spacing={1}>
+        {fretsData &&
+          fretsData.map((stringNotes, stringIndex) => (
+            <Grid item key={stringIndex}
+              sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                // backgroundColor: 'red',
+                width: '100%',
+                justifyContent: 'space-evenly',
+                paddingTop: '0px !important',
+                alignItems: 'center'
+                // paddingBottom: '10px',
+              }}
+            // id={`string-${stringIndex}`}
+            >
+              {stringNotes.map((note, fretIndex) => {
+                const fretWidth = `${(100 / (TOTAL_FRETS + 1)) * (TOTAL_FRETS - fretIndex)}%`; // Dynamic width calculation
+                return (
+                  <>
+                    <Box sx={{
 
+                    }}
+                      className="unvisiblefret"></Box>
+                    <Box
+                      key={fretIndex}
+                      className={"fretNumber"}
+                      id={`fretNm-${fretIndex}`}
+                      sx={{
+                        width: '35px', // Fixed width for each note
+                        height: 35,  // Height for visual representation
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        border: '1px solid #ddd',
+                        backgroundColor: note ? (fretIndex === 0 ? '#ffcc80' : '#64b5f6') : '#f0f0f0',
+                        borderRadius: '30px',
+                        boxShadow: note ? '0px 4px 6px rgba(0, 0, 0, 0.1)' : 'none',
+                        transition: 'background-color 0.3s, box-shadow 0.3s',
+                        cursor: note ? 'pointer' : 'default',
+                        marginLeft: fretIndex === 0 ? 0 : `${Math.log(TOTAL_FRETS - fretIndex + 1) * 5}px`, // Logarithmic spacing
+                        // position: 'relative'
+                        // opacity: scaleNotes[note] ? 1 : 0, // Opacity set to 100% if note is present, 20% if not
+                      }}
+                      title={note || 'Fret'}
+                    >
+                      <Typography
+                        variant="body2"
+                        sx={{
+                          fontWeight: note ? 'bold' : 'normal',
+                          color: note ? '#ffffff' : '#9e9e9e',
+                        }}
+                      >
+                        {note}
+                        {/* {fretIndex} */}
+                      </Typography>
+                    </Box>
+                  </>
+
+
+
+                );
+              })}
+            </Grid>
+          ))}
+      </Grid>
+      {/* NOTES */}
       <Grid container spacing={1}>
         {fretboardData &&
           fretboardData.map((stringNotes, stringIndex) => (
@@ -270,6 +325,7 @@ const GuitarScales = () => {
                     <Box
                       key={fretIndex}
                       className={"fretboardNote"}
+                      id={note}
                       sx={{
                         width: '35px', // Fixed width for each note
                         height: 35,  // Height for visual representation
@@ -284,12 +340,14 @@ const GuitarScales = () => {
                         cursor: note ? 'pointer' : 'default',
                         marginLeft: fretIndex === 0 ? 0 : `${Math.log(TOTAL_FRETS - fretIndex + 1) * 5}px`, // Logarithmic spacing
                         // position: 'relative'
-                        opacity: note ? 1 : 0, // Opacity set to 100% if note is present, 20% if not
+                        opacity: scaleNotes.includes(note) ? 1 : 0 // Opacity set to 100% if note is present, 20% if not
                       }}
                       title={note || 'Fret'}
+                      onClick={handleNoteClick}
                     >
                       <Typography
                         variant="body2"
+                        id="missclick"
                         sx={{
                           fontWeight: note ? 'bold' : 'normal',
                           color: note ? '#ffffff' : '#9e9e9e',
