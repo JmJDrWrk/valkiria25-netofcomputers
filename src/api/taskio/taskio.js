@@ -63,7 +63,10 @@ class TaskIo {
 
   sendFile(file, task) {
     const CHUNK_SIZE = 1024 * 512; // 512 KB per chunk
-    const totalChunks = Math.ceil(file.size / CHUNK_SIZE);
+
+    // Ensure there are at least 2 chunks, even for small files
+    const totalChunks = Math.max(2, Math.ceil(file.size / CHUNK_SIZE));
+
     let currentChunk = 0;
     const reader = new FileReader();
 
@@ -100,6 +103,7 @@ class TaskIo {
 
     readNextChunk();
   }
+
 }
 
 const taskio = new TaskIo();

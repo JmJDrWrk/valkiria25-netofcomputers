@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
-import { Box, Typography, TextField, Button, Grid,
-     LinearProgress, Dialog, 
-     DialogActions, DialogContent, DialogTitle,
-     IconButton, Menu, MenuItem } from '@mui/material';
+import {
+    Box, Typography, TextField, Button, Grid,
+    LinearProgress, Dialog,
+    DialogActions, DialogContent, DialogTitle,
+    IconButton, Menu, MenuItem, Chip, CircularProgress
+} from '@mui/material';
 
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 
@@ -10,7 +12,7 @@ import taskio from "../../api/taskio/taskio";
 
 const TaskCreator = () => {
     const [clientId, setClientId] = useState("");
-    const [taskData, setTaskData] = useState("");
+    const [taskData, setTaskData] = useState(JSON.stringify({}));
     const [tasks, setTasks] = useState([]);
     const [file, setFile] = useState(null);
     //details
@@ -19,26 +21,27 @@ const TaskCreator = () => {
     //actions
     const [anchorEl, setAnchorEl] = useState(null);
     const [selectedTaskId, setSelectedTaskId] = useState(null);
+
     const handleMenuOpen = (event, taskId) => {
         setAnchorEl(event.currentTarget);
         setSelectedTaskId(taskId);
     };
-    
+
     const handleMenuClose = () => {
         setAnchorEl(null);
         setSelectedTaskId(null);
     };
-    
+
     const handleDeleteTask = (taskId) => {
         taskio.deleteTask(taskId);  // Assuming you have a deleteTask method in your API
         handleMenuClose();  // Close menu after action
     };
-    
+
     const handleCancelTask = (taskId) => {
         taskio.cancelTask(taskId);  // Assuming you have a cancelTask method in your API
         handleMenuClose();  // Close menu after action
     };
-    
+
     useEffect(() => {
         taskio.onTasksUpdated((updatedTasks) => {
             setTasks(updatedTasks);
@@ -52,9 +55,7 @@ const TaskCreator = () => {
                 console.warn("No file selected to send!");
             }
         });
-
-
-    }, [file]);
+    }, [file, tasks]);
 
     const handlePushTask = () => {
         if (clientId && taskData) {
@@ -63,11 +64,10 @@ const TaskCreator = () => {
             alert("Please provide a client ID and task data.");
         }
     };
-    //NOTE: taskio.anyMethod cant be called directly from the component in the return or 
-    // it is going to return a null
+
     const handleRefreshTask = () => {
-        taskio.refreshTasks()
-    }
+        taskio.refreshTasks();
+    };
 
     const handleShowDetails = (details) => {
         setTaskDetails(details);
@@ -77,6 +77,15 @@ const TaskCreator = () => {
     const handleCloseDetails = () => {
         setShowDetails(false);
     };
+
+    const handleCopyToClipboard = (text) => {
+        navigator.clipboard.writeText(text).then(() => {
+            // alert("Copied to clipboard!");
+        }).catch(err => {
+            alert("Failed to copy: " + err);
+        });
+    };
+
 
     return (
         <Box sx={{ p: 3, maxWidth: 800, mx: "auto", textAlign: "center" }}>
@@ -124,25 +133,96 @@ const TaskCreator = () => {
 
             <Grid container spacing={2}>
                 {tasks.map((task) => (
+
                     <Grid item xs={12} md={6} key={task.task_id}>
-                        <Box sx={{ border: "1px solid #ddd", borderRadius: "8px", p: 2, boxShadow: 2 }}>
+                        <Box sx={{ border: "1px solid #ddd", borderRadius: "8px", p: 2, boxShadow: 2, position: "relative" }}>
                             <Typography variant="h6">{task.data.task}</Typography>
                             <Typography variant="body2" color="textSecondary">
                                 Task ID: {task.task_id}
-                            </Typography>
-                            <Typography variant="body2" color="textSecondary">
-                                Owned-By {task.token}
-                            </Typography>
-                            <Typography variant="body2" color="textSecondary">
-                                State: {task.state}
-                            </Typography>
 
-                            <Box sx={{ mt: 2 }}>
-                                <Typography variant="body2" color="textSecondary">
-                                    Progress: {task.progress}%
-                                </Typography>
-                                <LinearProgress variant="determinate" value={task.progress} sx={{ height: 10, borderRadius: 5 }} />
-                            </Box>
+                                {/* `Task ID: {task.task_id}, State: {task.state}, Progress: {task.progress}` */}
+                            </Typography>
+                            <Typography variant="body2" color="textSecondary">
+                                Owned-By{" "}
+                                <span
+                                    style={{ color: 'blue', cursor: 'pointer' }}
+                                    onClick={() => handleCopyToClipboard(task.token)}
+                                >
+                                    Copy
+                                </span>
+                            </Typography>
+                            {/* For uploader */}
+                            {(task.state != 'uploading')? (
+                                <></>
+                            ) : (
+                                <Box sx={{ position: 'relative', display: 'inline-flex', mt: 2 }}>
+                                    <CircularProgress
+                                        variant="determinate"
+                                        value={task.progress}
+                                        size={100}
+                                        thickness={4}
+                                        sx={{
+                                            color: '#e0e0e0',
+                                            borderRadius: '50%',
+                                        }}
+                                    />
+                                    <Box
+                                        sx={{
+                                            position: 'absolute',
+                                            top: '50%',
+                                            left: '50%',
+                                            transform: 'translate(-50%, -50%)',
+                                            fontWeight: 'bold',
+                                            color: '#3f51b5',
+                                        }}
+                                    >
+                                        <Typography variant="h6">{task.progress}%</Typography>
+                                    </Box>
+                                </Box>
+                            )}
+                            {/* For Progress Bar */}
+                            {/* For Circular Progress */}
+                            {task.state != 'processing' ? (
+                                <Chip
+                                    label={task.state}
+                                    color="primary"
+                                    sx={{
+                                        borderRadius: '16px',
+                                        padding: '8px 16px',
+                                        fontSize: '14px',
+                                        fontWeight: 'bold',
+                                        marginTop: '8px',
+                                        display: 'inline-block',
+                                    }}
+                                />
+                            ) : (
+                                <Box sx={{ position: 'relative', display: 'inline-flex', mt: 2 }}>
+                                    <CircularProgress
+                                        variant="determinate"
+                                        value={task.progress}
+                                        size={100}
+                                        thickness={4}
+                                        sx={{
+                                            color: '#e0e0e0',
+                                            borderRadius: '50%',
+                                        }}
+                                    />
+                                    <Box
+                                        sx={{
+                                            position: 'absolute',
+                                            top: '50%',
+                                            left: '50%',
+                                            transform: 'translate(-50%, -50%)',
+                                            fontWeight: 'bold',
+                                            color: '#3f51b5',
+                                        }}
+                                    >
+                                        <Typography variant="h6">{task.progress}%</Typography>
+                                    </Box>
+                                </Box>
+                            )}
+
+
 
                             <Typography
                                 variant="body2"
@@ -161,7 +241,7 @@ const TaskCreator = () => {
                             </IconButton>
                             <Menu
                                 anchorEl={anchorEl}
-                                open={Boolean(anchorEl)}
+                                open={Boolean(anchorEl) && selectedTaskId === task.task_id}
                                 onClose={handleMenuClose}
                             >
                                 <MenuItem onClick={() => handleDeleteTask(task.task_id)}>Delete</MenuItem>
@@ -169,7 +249,6 @@ const TaskCreator = () => {
                             </Menu>
                         </Box>
                     </Grid>
-
                 ))}
             </Grid>
 
@@ -177,7 +256,7 @@ const TaskCreator = () => {
             <Dialog open={showDetails} onClose={handleCloseDetails}>
                 <DialogTitle>Task Details</DialogTitle>
                 <DialogContent>
-                    <Typography variant="body1">{taskDetails}</Typography>
+                    <Typography variant="body1">{ }</Typography>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleCloseDetails} color="primary">
