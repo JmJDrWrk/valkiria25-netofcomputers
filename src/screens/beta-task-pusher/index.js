@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import io from 'socket.io-client';
 import { TextField, Button, Box, Typography, Grid, LinearProgress } from '@mui/material';
-
+import TaskIo from '../../api/taskio/taskio'
 const TaskCreator = () => {
   const [socket, setSocket] = useState(null);
   const [clientId, setClientId] = useState('');
@@ -35,7 +35,10 @@ const TaskCreator = () => {
         setTasks(data.tasks);
       }
     });
-    // Listen for service readiness
+
+
+
+    //Required impl replace all of this with taskio. ...
     newSocket.on('service_is_ready_to_receive_heavy_payload', (data) => {
       console.log('Service is ready to receive payload:', data);
       if (file) {
@@ -68,7 +71,7 @@ const TaskCreator = () => {
         file_type: file.type,
         data: event.target.result, // Binary data
       };
-
+      //Required impl
       socket.emit('push_task_data', chunkData);
       // Calculate the upload progress
       const progressUpload = Math.round((currentChunk / totalChunks) * 100);
@@ -88,6 +91,7 @@ const TaskCreator = () => {
         console.log('File transfer complete. end_pushing_data');
         task.file_name = file.name
         task.file_type = file.type
+        //Required impl
         socket.emit('end_pushing_data', task);
       }
     };

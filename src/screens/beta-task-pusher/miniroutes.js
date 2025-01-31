@@ -5,6 +5,7 @@ import { AppBar, Toolbar, Typography, Button, Grid, Card, CardContent, Container
 
 
 import INDEX from '.'
+import IMPL from './impl'
 // import TaskConsumer from './taskPuller';
 
 
@@ -47,7 +48,7 @@ function miniroutes() {
                 <Routes>
 
                     <Route path="/" element={<INDEX />} />
-                    {/* <Route path="/pull" element={<TaskConsumer />} /> */}
+                    <Route path="/impl" element={<IMPL />} />
                     {/* <Route path="/home" element={<Home />} />
                 <Route path="/home/services" element={<Services />} /> */}
                 </Routes>

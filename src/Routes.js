@@ -32,7 +32,7 @@ function AppRoutes() {
         <Route path="/explore" element={<ExploreProject/>} />
         <Route path="/guitar-tuner" element={<GuitarTunerProject/>} />
         <Route path="/eco-friend" element={<EcoFriendProject/>} />
-        <Route path="/beta-task-pusher" element={<BetaTaskPusherProject/>} />
+        <Route path="/beta-task-pusher/*" element={<BetaTaskPusherProject/>} />
         <Route path="/beta-task-pusher/pull" element={<TaskConsumer/>} />
         <Route path="/guitar-scales" element={<GuitarScalesRoutes/>} />
         <Route path="/png-to-ico" element={<PNGtoICORoutes/>} />
