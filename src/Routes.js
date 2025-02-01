@@ -9,7 +9,7 @@ import MainHome from './screens/MainHome';
 import HomeProjectRoutes from './screens/home/miniroutes'
 import ExploreProject from './screens/explore/miniroutes'
 import GuitarTunerProject from './screens/guitar-tuner/miniroutes'
-import EcoFriendProject from './screens/eco-friend/miniroutes'
+import EcoFriendProject from './screens/public/eco-friend/miniroutes'
 import BetaTaskPusherProject from './screens/beta-task-pusher/miniroutes'
 import TaskConsumer from './screens/beta-task-pusher/taskPuller'
 import GuitarScalesRoutes from './screens/public/guitar-scales/miniroutes'

@@ -11,8 +11,8 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import taskio from "../../api/taskio/taskio";
 
 const TaskCreator = () => {
-    const [clientId, setClientId] = useState("");
-    const [taskData, setTaskData] = useState(JSON.stringify({}));
+    const [clientId, setClientId] = useState("any");
+    const [taskData, setTaskData] = useState(JSON.stringify({"explicit_service_name":"xls_to_json_and_csv", "file":"export2025114.xls", "use_public_files":false}));
     const [tasks, setTasks] = useState([]);
     const [file, setFile] = useState(null);
     //details
@@ -86,7 +86,13 @@ const TaskCreator = () => {
         });
     };
 
-
+    // Function to download files
+    const handleDownloadFile = (fileUrl, fileName) => {
+        const link = document.createElement("a");
+        link.href = fileUrl;
+        link.download = fileName;
+        link.click();
+    };
     return (
         <Box sx={{ p: 3, maxWidth: 800, mx: "auto", textAlign: "center" }}>
             <Typography variant="h4" gutterBottom>
@@ -222,7 +228,23 @@ const TaskCreator = () => {
                                 </Box>
                             )}
 
-
+ {/* Check if files exist in task */}
+ {task.data.files && task.data.files.length > 0 && (
+                                <Box sx={{ mt: 2 }}>
+                                    <Typography variant="body2" sx={{ mb: 1 }}>
+                                        Files available for download:
+                                    </Typography>
+                                    {task.data.files.map((file, index) => (
+                                        <Button
+                                            key={index}
+                                            variant="outlined"
+                                            onClick={() => handleDownloadFile(file.url, file.name)}
+                                        >
+                                            Download {file.name}
+                                        </Button>
+                                    ))}
+                                </Box>
+                            )}
 
                             <Typography
                                 variant="body2"

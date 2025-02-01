@@ -34,6 +34,20 @@ class TaskIo {
       console.log("Service is ready to receive payload:", data);
       if (this.heavyPayloadCallback) this.heavyPayloadCallback(data);
     });
+
+    this.socket.on("service_will_not_be_ready_to_receive_heavy_payload", (data) => {
+      // alert('We are not required any more!')
+      console.log('Service is not requiring us to send anything!')
+    })
+
+    this.socket.on("webclient_task_data_in", (chunk) => {
+      handleReceivedChunk(chunk);
+    })
+  }
+
+  handleReceivedChunk = (chunk) => {
+    console.log("Received chunk", chunk.chunk_number + 1, "of", chunk.total_chunks);
+
   }
 
   onTasksUpdated(callback) {
@@ -55,6 +69,11 @@ class TaskIo {
     } catch (err) {
       console.error("Error parsing task data:", err);
     }
+  }
+
+  deleteTask(task) {
+    console.log('deleting task', task)
+    this.socket.emit('delete_task', task)
   }
 
   refreshTasks() {
