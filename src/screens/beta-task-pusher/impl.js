@@ -14,13 +14,27 @@ const TaskCreator = () => {
     const [clientId, setClientId] = useState("any");
     const [taskData, setTaskData] = useState(JSON.stringify(
         {
-            "explicit_service_name": "example_run",
-            "file": "nothingdotcom.mp3",
+            "explicit_service_name": "santander_xls_to_json_and_csv",
+            "file": "20242025stn.xls",
             "use_public_files": false,
             'task_type': 'heavy_payload',
             'client_side_compression': true,
             'configjson': {
-                'random': 'value'
+                'file_name': '20242025stn.xls',
+                'categorias_claves' : {
+                    "Supermercado": ["mercadona","gadis","eroski","dia","carrefour","supeco","coviran"],
+                    "Repostaje": ["carbugal","repsol","gas","shell","easygas"],
+                    "Compra": ["compra", "tarjeta", "ecommerce", "shopping"],
+                    "Pago Movil": ["pago movil"],
+                    "Bizum Clase Guitarra":["Bizum A Favor De Fernando Jose Montoya Morales"],
+                    "Bizum Rec" : ["bizum De"],
+                    "Bizum Emi": ["bizum a favor de"],
+                    "Recibo": ["recibo","prestamo","liquidacion","periodica"],
+                    "Transferencia": ["transferencia"],
+                    "Otros": [""]
+                },
+                
+            
             }
         }
     ));
