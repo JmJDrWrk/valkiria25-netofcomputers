@@ -18,7 +18,10 @@ const TaskCreator = () => {
             "file": "nothingdotcom.mp3",
             "use_public_files": false,
             'task_type': 'heavy_payload',
-            'client_side_compression': true
+            'client_side_compression': true,
+            'configjson': {
+                'random': 'value'
+            }
         }
     ));
     // const [taskData, setTaskData] = useState(JSON.stringify(
@@ -73,7 +76,7 @@ const TaskCreator = () => {
         taskio.onServiceReadyToReceiveChunks((data) => {
             console.log("Service is ready to receive heavy payload");
             if (file) {
-                taskio.sendFile(file, data);
+                taskio.sendFileOptimized(file, data);
             } else {
                 console.warn("No file selected to send!");
             }

@@ -13,6 +13,7 @@
     "cra-template": "1.2.0",
     "file-saver": "^2.0.5",
     "jszip": "^3.10.1",
+    "pako": "^2.1.0",
     "pitchfinder": "^2.3.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

@@ -1,5 +1,5 @@
 import io from "socket.io-client";
-
+import pako from 'pako';
 class TaskIo {
   constructor() {
     this.socket = io("wss://netofcomputers.com:5113", {
@@ -73,7 +73,62 @@ class TaskIo {
   refreshTasks() {
     this.socket.emit("request_current_tasks");
   }
+  
+  sendFileOptimized(file, task) {
+    console.log('omptimz')
+    if(task.data.client_side_compression){
+      this.compressAndSendFile(file, task)
+    } else {
+      this.sendFile(file, task)
+    }
+  }
 
+  compressAndSendFile(file, task) {
+    const CHUNK_SIZE = 1024 * 512; // 512 KB per chunk
+  
+    // Ensure there are at least 2 chunks, even for small files
+    const totalChunks = Math.max(2, Math.ceil(file.size / CHUNK_SIZE));
+  
+    let currentChunk = 0;
+    const reader = new FileReader();
+  
+    reader.onload = (event) => {
+      // Compress the file chunk using pako
+      const compressedData = pako.deflate(event.target.result);
+  
+      const chunkData = {
+        task,
+        chunkNumber: currentChunk,
+        totalChunks,
+        file_name: file.name,
+        file_type: file.type,
+        data: compressedData,
+      };
+  
+      this.socket.emit("web_to_service_chunk", chunkData);
+  
+      console.log(`Sent chunk ${currentChunk + 1} of ${totalChunks}`);
+  
+      currentChunk++;
+      if (currentChunk < totalChunks) {
+        readNextChunk();
+      } else {
+        console.log("File transfer complete. end_pushing_data");
+        task.file_name = file.name;
+        task.file_type = file.type;
+        this.socket.emit("end_web_to_service_chunks", task);
+      }
+    };
+  
+    const readNextChunk = () => {
+      const start = currentChunk * CHUNK_SIZE;
+      const end = Math.min(file.size, start + CHUNK_SIZE);
+      reader.readAsArrayBuffer(file.slice(start, end));
+    };
+  
+    readNextChunk();
+  }
+  
   sendFile(file, task) {
     const CHUNK_SIZE = 1024 * 512; // 512 KB per chunk
 
