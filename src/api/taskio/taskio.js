@@ -22,10 +22,10 @@ class TaskIo {
     //update_now->
     this.socket.on("update_now", () => {
       console.log("Update is requested by server!");
-      this.socket.emit("my_tasks");
+      this.socket.emit("request_current_tasks");
     });
 
-    this.socket.on("your_tasks", (data) => {
+    this.socket.on("response_current_tasks", (data) => {
       console.log("Received updated set of my tasks", data);
       if (this.tasksCallback) this.tasksCallback(data.tasks);
     });
@@ -36,29 +36,28 @@ class TaskIo {
     });
 
     this.socket.on("service_will_not_be_ready_to_receive_heavy_payload", (data) => {
-      // alert('We are not required any more!')
-      console.log('Service is not requiring us to send anything!')
+      console.log("Not need to send payload:", data);
     })
 
-    this.socket.on("webclient_data_in", (chunk) => {
+    this.socket.on("service_to_web_chunk", (chunk) => {
       this.handleReceivedChunk(chunk);
     })
   }
 
-  onTasksUpdated(callback) {
+  onUpdate_tasks(callback) {
     this.tasksCallback = callback;
   }
 
-  onServiceReadyToReceiveHeavyPayload(callback) {
+  onServiceReadyToReceiveChunks(callback) {
     this.heavyPayloadCallback = callback;
   }
 
   pushTask(taskData) {
     try {
       let payload = {
-        task_type: "heavy_load",
         data: typeof taskData === "string" ? JSON.parse(taskData) : taskData,
       };
+      payload.task_type = payload.data.task_type;
       console.log(" socket.emit ... push_task", { task: payload });
       this.socket.emit("push_task", { task: payload });
     } catch (err) {
@@ -72,7 +71,7 @@ class TaskIo {
   }
 
   refreshTasks() {
-    this.socket.emit("my_tasks");
+    this.socket.emit("request_current_tasks");
   }
 
   sendFile(file, task) {
@@ -94,7 +93,7 @@ class TaskIo {
         data: event.target.result,
       };
 
-      this.socket.emit("push_task_data", chunkData);
+      this.socket.emit("web_to_service_chunk", chunkData);
 
       console.log(`Sent chunk ${currentChunk + 1} of ${totalChunks}`);
 
@@ -105,7 +104,7 @@ class TaskIo {
         console.log("File transfer complete. end_pushing_data");
         task.file_name = file.name;
         task.file_type = file.type;
-        this.socket.emit("end_pushing_data", task);
+        this.socket.emit("end_web_to_service_chunks", task);
       }
     };
 
@@ -122,7 +121,7 @@ class TaskIo {
     console.log('Hwllo')
     // console.log('requesting file', task)
     task['data']['file_name'] = fileName
-    this.socket.emit("retrieve_task_file", task);
+    this.socket.emit("request_file_from_task", task);
   }
   fileChunks = {};
   totalChunks = {};

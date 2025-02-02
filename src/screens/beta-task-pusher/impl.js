@@ -12,7 +12,29 @@ import taskio from "../../api/taskio/taskio";
 
 const TaskCreator = () => {
     const [clientId, setClientId] = useState("any");
-    const [taskData, setTaskData] = useState(JSON.stringify({"explicit_service_name":"xls_to_json_and_csv", "file":"export2025114.xls", "use_public_files":false}));
+    // const [taskData, setTaskData] = useState(JSON.stringify(
+    //     {
+    //         "explicit_service_name": "xls_to_json_and_csv",
+    //         "file": "export2025114.xls",
+    //         "use_public_files": false,
+    //         'task_type': 'heavy_payload'
+    //     }
+    // ));
+    const [taskData, setTaskData] = useState(JSON.stringify(
+        {
+            "explicit_service_name": "xls_to_json_and_csv",
+            "file": "export2025114.xls",
+            "use_public_files": false,
+            'task_type': 'built_in_data',
+            'built_in_data': [{
+                'file_name': 'sampleMelly.json',
+                'content': {
+                    "name": "Melly",
+                    "age": 25
+                }
+            }]
+        }
+    ));
     const [tasks, setTasks] = useState([]);
     const [file, setFile] = useState(null);
     //details
@@ -43,11 +65,11 @@ const TaskCreator = () => {
     };
 
     useEffect(() => {
-        taskio.onTasksUpdated((updatedTasks) => {
-            setTasks(updatedTasks);
+        taskio.onUpdate_tasks((utasks) => {
+            setTasks(utasks);
         });
 
-        taskio.onServiceReadyToReceiveHeavyPayload((data) => {
+        taskio.onServiceReadyToReceiveChunks((data) => {
             console.log("Service is ready to receive heavy payload");
             if (file) {
                 taskio.sendFile(file, data);
@@ -160,7 +182,7 @@ const TaskCreator = () => {
                                 </span>
                             </Typography>
                             {/* For uploader */}
-                            {(task.state != 'uploading')? (
+                            {(task.state != 'uploading') ? (
                                 <></>
                             ) : (
                                 <Box sx={{ position: 'relative', display: 'inline-flex', mt: 2 }}>
@@ -230,8 +252,8 @@ const TaskCreator = () => {
                                 </Box>
                             )}
 
- {/* Check if files exist in task */}
- {task.data.files && task.data.files.length > 0 && (
+                            {/* Check if files exist in task */}
+                            {task.data.files && task.data.files.length > 0 && (
                                 <Box sx={{ mt: 2 }}>
                                     <Typography variant="body2" sx={{ mb: 1 }}>
                                         Files available for download:
