@@ -12,29 +12,30 @@ import taskio from "../../api/taskio/taskio";
 
 const TaskCreator = () => {
     const [clientId, setClientId] = useState("any");
+    const [taskData, setTaskData] = useState(JSON.stringify(
+        {
+            "explicit_service_name": "example_run",
+            "file": "nothingdotcom.mp3",
+            "use_public_files": false,
+            'task_type': 'heavy_payload',
+            'client_side_compression': true
+        }
+    ));
     // const [taskData, setTaskData] = useState(JSON.stringify(
     //     {
     //         "explicit_service_name": "xls_to_json_and_csv",
     //         "file": "export2025114.xls",
     //         "use_public_files": false,
-    //         'task_type': 'heavy_payload'
+    //         'task_type': 'built_in_data',
+    //         'built_in_data': [{
+    //             'file_name': 'sampleMelly.json',
+    //             'content': {
+    //                 "name": "Melly",
+    //                 "age": 25
+    //             }
+    //         }]
     //     }
     // ));
-    const [taskData, setTaskData] = useState(JSON.stringify(
-        {
-            "explicit_service_name": "xls_to_json_and_csv",
-            "file": "export2025114.xls",
-            "use_public_files": false,
-            'task_type': 'built_in_data',
-            'built_in_data': [{
-                'file_name': 'sampleMelly.json',
-                'content': {
-                    "name": "Melly",
-                    "age": 25
-                }
-            }]
-        }
-    ));
     const [tasks, setTasks] = useState([]);
     const [file, setFile] = useState(null);
     //details
