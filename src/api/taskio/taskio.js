@@ -19,7 +19,7 @@ class TaskIo {
     this.socket.on("disconnect", (reason) => {
       console.log("Disconnected from server due to:", reason);
     });
-
+    //update_now->
     this.socket.on("update_now", () => {
       console.log("Update is requested by server!");
       this.socket.emit("my_tasks");
@@ -40,14 +40,9 @@ class TaskIo {
       console.log('Service is not requiring us to send anything!')
     })
 
-    this.socket.on("webclient_task_data_in", (chunk) => {
-      handleReceivedChunk(chunk);
+    this.socket.on("webclient_data_in", (chunk) => {
+      this.handleReceivedChunk(chunk);
     })
-  }
-
-  handleReceivedChunk = (chunk) => {
-    console.log("Received chunk", chunk.chunk_number + 1, "of", chunk.total_chunks);
-
   }
 
   onTasksUpdated(callback) {
@@ -64,7 +59,7 @@ class TaskIo {
         task_type: "heavy_load",
         data: typeof taskData === "string" ? JSON.parse(taskData) : taskData,
       };
-      console.log("push_task", { task: payload });
+      console.log(" socket.emit ... push_task", { task: payload });
       this.socket.emit("push_task", { task: payload });
     } catch (err) {
       console.error("Error parsing task data:", err);
@@ -123,7 +118,57 @@ class TaskIo {
     readNextChunk();
   }
 
+  requestFile(task, fileName){
+    console.log('Hwllo')
+    // console.log('requesting file', task)
+    task['data']['file_name'] = fileName
+    this.socket.emit("retrieve_task_file", task);
+  }
+  fileChunks = {};
+  totalChunks = {};
+  handleReceivedChunk (chunk) {
+    const { task, file_name, chunk_number, total_chunks, data } = chunk;
+    const task_id = task['task_id']
+    if (!this.fileChunks[task_id]) {
+      this.fileChunks[task_id] = [];
+      this.totalChunks[task_id] = total_chunks;
+    }
+
+    this.fileChunks[task_id][chunk_number] = data;
+
+    console.log(`Received chunk ${chunk_number + 1} of ${total_chunks} for ${file_name}`);
+
+    // If all chunks are received, reconstruct the file
+    if (this.fileChunks[task_id].length === total_chunks) {
+      this.handleFileDownload(task_id, file_name);
+    }
+  };
+
+  handleFileDownload = (task_id, file_name) => {
+    if (!this.fileChunks[task_id] || this.fileChunks[task_id].length !== this.totalChunks[task_id]) {
+      console.log(`Waiting for all chunks of ${file_name}...`);
+      return;
+    }
+
+    const fileBlob = new Blob(this.fileChunks[task_id], { type: "application/octet-stream" });
+    const url = URL.createObjectURL(fileBlob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = file_name;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
+    console.log(`File ${file_name} downloaded successfully!`);
+
+    // Cleanup
+    delete this.fileChunks[task_id];
+    delete this.totalChunks[task_id];
+  };
 }
+
 
 const taskio = new TaskIo();
 export default taskio;

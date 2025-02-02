@@ -87,11 +87,13 @@ const TaskCreator = () => {
     };
 
     // Function to download files
-    const handleDownloadFile = (fileUrl, fileName) => {
-        const link = document.createElement("a");
-        link.href = fileUrl;
-        link.download = fileName;
-        link.click();
+    const handleDownloadFile = (task, fileName) => {
+        // const link = document.createElement("a");
+        // link.href = fileUrl;
+        // link.download = fileName;
+        // link.click();
+        console.log('flint', task, fileName)
+        taskio.requestFile(task, fileName);
     };
     return (
         <Box sx={{ p: 3, maxWidth: 800, mx: "auto", textAlign: "center" }}>
@@ -238,7 +240,7 @@ const TaskCreator = () => {
                                         <Button
                                             key={index}
                                             variant="outlined"
-                                            onClick={() => handleDownloadFile(file.url, file.name)}
+                                            onClick={() => handleDownloadFile(task, file.name)}
                                         >
                                             Download {file.name}
                                         </Button>
