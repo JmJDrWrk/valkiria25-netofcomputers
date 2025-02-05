@@ -36,7 +36,7 @@ function AppRoutes() {
         <Route path="/beta-task-pusher/pull" element={<TaskConsumer/>} />
         <Route path="/guitar-scales" element={<GuitarScalesRoutes/>} />
         <Route path="/png-to-ico" element={<PNGtoICORoutes/>} />
-        <Route path="/awesome-routes" element={<AwesomeRoutes/>} />
+        <Route path="/awesome-routes/*" element={<AwesomeRoutes/>} />
 
       </Routes>
       {/* <Footer flexGrow={1} /> */}

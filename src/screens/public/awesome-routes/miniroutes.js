@@ -5,6 +5,7 @@ import { AppBar, Toolbar, Typography, Button, Grid, Card, CardContent, Container
 
 
 import INDEX from '.'
+import Newspaper from './news';
 // import TaskConsumer from './taskPuller';
 
 
@@ -47,6 +48,7 @@ function miniroutes() {
           <Routes>
 
             <Route path="/" element={<INDEX />} />
+            <Route path="/beta" element={<Newspaper />} />
 
           </Routes>
         </div>

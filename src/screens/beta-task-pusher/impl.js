@@ -14,30 +14,43 @@ const TaskCreator = () => {
     const [clientId, setClientId] = useState("any");
     const [taskData, setTaskData] = useState(JSON.stringify(
         {
-            "explicit_service_name": "santander_xls_to_json_and_csv",
-            "file": "20242025stn.xls",
+            "explicit_service_name": "generate_image_with_ai",
+            "file": "ack.ukn",
             "use_public_files": false,
-            'task_type': 'heavy_payload',
-            'client_side_compression': true,
-            'configjson': {
-                'file_name': '20242025stn.xls',
-                'categorias_claves' : {
-                    "Supermercado": ["mercadona","gadis","eroski","dia","carrefour","supeco","coviran"],
-                    "Repostaje": ["carbugal","repsol","gas","shell","easygas"],
-                    "Compra": ["compra", "tarjeta", "ecommerce", "shopping"],
-                    "Pago Movil": ["pago movil"],
-                    "Bizum Clase Guitarra":["Bizum A Favor De Fernando Jose Montoya Morales"],
-                    "Bizum Rec" : ["bizum De"],
-                    "Bizum Emi": ["bizum a favor de"],
-                    "Recibo": ["recibo","prestamo","liquidacion","periodica"],
-                    "Transferencia": ["transferencia"],
-                    "Otros": [""]
-                },
-                
-            
+            'task_type': 'no_data',
+            'argdict': {
+                'output_file_name': 'lake',
+                'prompt': 'A beautiful forest night minimalistic wallpaper',
+                'steps': 2
             }
         }
     ));
+    // const [taskData, setTaskData] = useState(JSON.stringify(
+    //     {
+    //         "explicit_service_name": "santander_xls_to_json_and_csv",
+    //         "file": "20242025stn.xls",
+    //         "use_public_files": false,
+    //         'task_type': 'heavy_payload',
+    //         'client_side_compression': true,
+    //         'configjson': {
+    //             'file_name': '20242025stn.xls',
+    //             'categorias_claves' : {
+    //                 "Supermercado": ["mercadona","gadis","eroski","dia","carrefour","supeco","coviran"],
+    //                 "Repostaje": ["carbugal","repsol","gas","shell","easygas"],
+    //                 "Compra": ["compra", "tarjeta", "ecommerce", "shopping"],
+    //                 "Pago Movil": ["pago movil"],
+    //                 "Bizum Clase Guitarra":["Bizum A Favor De Fernando Jose Montoya Morales"],
+    //                 "Bizum Rec" : ["bizum De"],
+    //                 "Bizum Emi": ["bizum a favor de"],
+    //                 "Recibo": ["recibo","prestamo","liquidacion","periodica"],
+    //                 "Transferencia": ["transferencia"],
+    //                 "Otros": [""]
+    //             },
+                
+            
+    //         }
+    //     }
+    // ));
     // const [taskData, setTaskData] = useState(JSON.stringify(
     //     {
     //         "explicit_service_name": "xls_to_json_and_csv",
@@ -245,7 +258,7 @@ const TaskCreator = () => {
                                 />
                             ) : (
                                 <Box sx={{ position: 'relative', display: 'inline-flex', mt: 2 }}>
-                                    <CircularProgress
+                                    {/* <CircularProgress
                                         variant="determinate"
                                         value={task.progress}
                                         size={100}
@@ -254,7 +267,15 @@ const TaskCreator = () => {
                                             color: '#e0e0e0',
                                             borderRadius: '50%',
                                         }}
-                                    />
+                                    /> */}
+                                    <CircularProgress
+    size={100}           // Size of the spinner
+    thickness={4}        // Thickness of the spinner line
+    sx={{
+        color: 'black', // Customize the color (can use any color)
+        animationDuration: '1550ms', // You can adjust the spin speed here
+    }}
+/>
                                     <Box
                                         sx={{
                                             position: 'absolute',
