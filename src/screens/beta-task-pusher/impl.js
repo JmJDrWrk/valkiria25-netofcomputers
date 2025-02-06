@@ -46,8 +46,8 @@ const TaskCreator = () => {
     //                 "Transferencia": ["transferencia"],
     //                 "Otros": [""]
     //             },
-                
-            
+
+
     //         }
     //     }
     // ));
@@ -269,13 +269,13 @@ const TaskCreator = () => {
                                         }}
                                     /> */}
                                     <CircularProgress
-    size={100}           // Size of the spinner
-    thickness={4}        // Thickness of the spinner line
-    sx={{
-        color: 'black', // Customize the color (can use any color)
-        animationDuration: '1550ms', // You can adjust the spin speed here
-    }}
-/>
+                                        size={100}           // Size of the spinner
+                                        thickness={4}        // Thickness of the spinner line
+                                        sx={{
+                                            color: 'black', // Customize the color (can use any color)
+                                            animationDuration: '1550ms', // You can adjust the spin speed here
+                                        }}
+                                    />
                                     <Box
                                         sx={{
                                             position: 'absolute',

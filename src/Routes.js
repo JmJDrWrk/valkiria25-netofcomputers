@@ -14,7 +14,8 @@ import BetaTaskPusherProject from './screens/beta-task-pusher/miniroutes'
 import TaskConsumer from './screens/beta-task-pusher/taskPuller'
 import GuitarScalesRoutes from './screens/public/guitar-scales/miniroutes'
 import PNGtoICORoutes from './screens/public/png-to-ico/miniroutes'
-import AwesomeRoutes from './screens/public/awesome-routes/miniroutes'
+import AiImageGenerator from './screens/public/ai-image-generator/miniroutes'
+import BandOfTheWeek from './screens/public/bandoftheweek/miniroutes'
 
 
 function AppRoutes() {
@@ -36,7 +37,8 @@ function AppRoutes() {
         <Route path="/beta-task-pusher/pull" element={<TaskConsumer/>} />
         <Route path="/guitar-scales" element={<GuitarScalesRoutes/>} />
         <Route path="/png-to-ico" element={<PNGtoICORoutes/>} />
-        <Route path="/awesome-routes/*" element={<AwesomeRoutes/>} />
+        <Route path="/bandoftheweek/*" element={<BandOfTheWeek/>} />
+        <Route path="/ai-image-generator/*" element={<AiImageGenerator/>} />
 
       </Routes>
       {/* <Footer flexGrow={1} /> */}

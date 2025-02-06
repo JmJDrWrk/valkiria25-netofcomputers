@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './newnews.css';
 import bands from './bands';
 
@@ -11,11 +11,52 @@ const Newspaper = () => {
         setExpandedArticle(expandedArticle === index ? null : index);
         console.log('bands', bands)
     };
+    // State to manage modal visibility
+    const [showModal, setShowModal] = useState(false);
+    const [showModalExit, setShowModalExit] = useState(false);
+    // Hide the modal after 5 seconds (or based on any other condition)
+    useEffect(() => {
+        // Show modal after 2 seconds
+        const showTimer = setTimeout(() => {
+            setShowModal(true);
 
+            // Hide modal after 5 seconds from when it appears
+            const hideTimer = setTimeout(() => {
+                setShowModal(false);
+            }, 150000);
 
+            return () => clearTimeout(hideTimer); // Cleanup hide timer
+        }, 3500);
+
+        return () => clearTimeout(showTimer); // Cleanup show timer
+    }, []);
+    const handleAddClick = () => {
+        window.open("https://netofcomputers.com/picso.html", "_blank");
+        setShowModalExit(true);
+    }
 
     return (
         <div className="newspaper">
+            {/* Modal */}
+            {showModal && (
+                <div className="modal"  onClick={handleAddClick}>
+                    <div className="modal-content">
+                        {/* <span className="close">&times;</span> */}
+                        {showModalExit && (<span className="close" onClick={() => setShowModal(false)}>&times;</span>)}
+                        <h2>Buy Now a 0riginal Picso</h2>
+                        <figure className="figure">
+                                    <img
+                                        className="media"
+                                        src="https://netofcomputers.com/paco/paco.jpg"
+                                        alt="Avenged Sevenfold"
+                                    />
+                                    <figcaption className="figcaption" onClick={() => window.location.href = "band.link"}></figcaption>
+                                </figure>
+                        <p>An incredibly unique and exclusive masterpiece of a Picso</p>
+                        <h1>20$</h1>
+                    </div>
+                </div>
+            )}
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
 
             <div className="head">
@@ -38,7 +79,8 @@ const Newspaper = () => {
                         key={index}>
                         <div className="head">
                             <span className="headline hl5">
-                                {expandedArticle === index ? band.title : '??? ???'}
+                                {/* {expandedArticle === index ? band.title : '??? ???'} */}
+                                {band && band.title ? band.title : '??? ???'}
                             </span>
                         </div>
 
@@ -48,13 +90,13 @@ const Newspaper = () => {
                                 {band && band.paragraph && band.paragraph.split('\n')
                                     .filter((s) => s.trim() !== '')  // Filter out empty or null strings
                                     .map((s, index) => (
-                                        <p key={index}>{s}</p>  // Use `index` as the key instead of the string itself
+                                        <p key={index}>{s}</p>  // Use index as the key instead of the string itself
                                     ))}
 
                                 <figure className="figure">
                                     <img
                                         className="media"
-                                        src="https://i.gifer.com/HhXF.gif"
+                                        src={band.image}
                                         alt="Avenged Sevenfold"
                                     />
                                     <figcaption className="figcaption" onClick={() => window.location.href = band.link}></figcaption>
@@ -71,7 +113,7 @@ const Newspaper = () => {
 
             </div>
             <footer className="newspaper-footer">
-                <p>Copyright © 2025 Greyscale News. All rights reserved.</p>
+                <p>Copyright © 2025 JotaRoma News. All lefts reserved.</p>
             </footer>
         </div>
     );

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Typography, CircularProgress, Container, Grid, Box } from '@mui/material';
-import './news.css'
+
 
 const MainView = () => {
 
@@ -18,7 +18,7 @@ const MainView = () => {
                 <meta name="viewport" content="width=device-width" />
             </head>
             <body>
-                <div className="head">
+            <div className="head">
                     <div className="headerobjectswrapper">
                         <div className="weatherforcastbox">
                             <span style={{ fontStyle: "italic" }}>
