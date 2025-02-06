@@ -1,97 +1,105 @@
 import { useState, useEffect, useRef } from "react";
-import { TextField, Button, Container, Box, Paper, Typography, Card } from "@mui/material";
-
+import { TextField, Button, Container, Box, Typography, Card } from "@mui/material";
+import { motion } from "framer-motion"; // Import framer-motion
+import TaskioCard from "../../../components/util/TaskioCard"
+import ChatBox from "./components/ChatBox";
+import taskio from "../../../api/taskio/taskio";
 const ChatGPTClone = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
-  const [showCard, setShowCard] = useState(false); // New state to control card visibility
+  const [showCard, setShowCard] = useState(false);
   const chatEndRef = useRef(null);
 
-  const sendMessage = () => {
-    if (!input.trim()) return;
-
-    const newMessages = [...messages, { text: input, sender: "user" }];
-    setMessages(newMessages);
-    setInput("");
-
-    // Simulate AI response delay
-    setTimeout(() => {
-      setMessages([...newMessages, { text: "Thinking...", sender: "ai" }]);
-      setTimeout(() => {
-        setMessages([...newMessages, { text: "Here's my response!", sender: "ai" }]);
-      }, 1000);
-    }, 500);
-
-    // Show the card and hide the input box after message is sent
-    setShowCard(true);
-  };
-
-  // Auto-scroll to the latest message
+  // autoscroll to latest message?? unneeded
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  return (
-    <Container
-      maxWidth="sm"
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        height: "100vh",
-        p: 2,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      {/* Chatbox input area, which disappears after sending a message */}
-      {(
-        <Box
-          sx={{
-            opacity: !showCard ? 1 : 0.5, // Makes the box semi-transparent when disabled
-            pointerEvents: !showCard ? "auto" : "none", // Disables interaction when showCard is false
-            display: "flex",
-            // Optionally, you can add a grayish background to indicate it's disabled
-            backgroundColor: !showCard ? "initial" : "gray",
-            display: "flex",
-            gap: 1,
-            mt: 2,
-            border: "1px solid #ddd", // Optional border for the box
-            padding: 2, // Add padding for the box
-            borderRadius: "8px", // Rounded corners for the box
-            boxShadow: 2, // Optional shadow to make it stand out
-            width: "100%", // Ensures it's taking up available width
-            maxWidth: 500, // Restrict the max width of the input box
-          }}
-        >
-          <TextField
-            fullWidth
-            variant="outlined"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="Type a message..."
-            onKeyPress={(e) => e.key === "Enter" && sendMessage()}
-            sx={{
-              "& .MuiOutlinedInput-root": {
-                borderRadius: "16px", // Rounded corners for the input
-              },
-            }}
-          />
-          <Button
-            variant="contained"
-            onClick={sendMessage}
-            sx={{
-              borderRadius: "16px", // Rounded corners for the button
-              height: "100%", // Ensure button height matches the input field
-            }}
-          >
-            Send
-          </Button>
-        </Box>
-      )}
 
-      {/* Card that pops up after sending a message */}
-      {showCard && (
-        <Card
+  // taskio implementation
+  const [tasks, setTasks] = useState([]);
+  const [task, setTask] = useState();
+  const [file, setFile] = useState(null);
+  const [clientId, setClientId] = useState("any");
+  const [disableChat, setDisableChat] = useState(false)
+
+
+  useEffect(() => {
+    taskio.refreshTasks();
+    taskio.onUpdate_tasks((utasks) => {
+      if (utasks.length > 0) {
+        const lastTask = utasks[utasks.length - 1];
+        console.log("Last Task Updated:", lastTask);
+        setTask(lastTask);
+        setDisableChat(lastTask.state=='processing'); // Disable chat if not processed
+      } else {
+        setDisableChat(false); // Default to disabled if no tasks exist
+      }
+    });
+
+    taskio.onServiceReadyToReceiveChunks((data) => {
+      console.log("Service is ready to receive heavy payload");
+      if (file) {
+        taskio.sendFileOptimized(file, data);
+      } else {
+        console.warn("No file selected to send!");
+      }
+    });
+  }, []);
+
+  const onChatInput = (input) => {
+    // taskio.taskBuilder.no_data()
+    const pseudoTask = {
+      "explicit_service_name": "generate_image_with_ai",
+      "file": "ack.ukn",
+      "use_public_files": false,
+      "task_type": "no_data",
+      "argdict": {
+        "output_file_name": "lake",
+        "prompt": input,
+        "steps": 1
+      },
+      "task_type": "no_data"
+    }
+  
+
+
+  if (clientId && pseudoTask) {
+    taskio.pushTask(pseudoTask);
+    console.log(' Sending', pseudoTask)
+  } else {
+    alert("Please provide a client ID and task data.");
+  }
+}
+    // Function to download files
+    const handleDownloadFile = (task, fileName) => {
+      console.log('flint', task, fileName)
+      taskio.requestFile(task, fileName);
+  };
+return (
+  <Container maxWidth="sm" sx={{ display: "flex", flexDirection: "column", height: "100vh", p: 2, justifyContent: "center", alignItems: "center" }}>
+
+
+    <ChatBox disableChat={disableChat} onSendMessage={onChatInput} />
+
+    {task && (
+
+
+      <motion.div
+        initial={{ opacity: 0 }} // Start with opacity 0
+        animate={{ opacity: 1 }} // Animate to full opacity
+        transition={{ duration: 0.5 }} // Set the duration of the fade-in
+        style={{
+          position: "absolute", // Position it absolutely within the parent
+          top: "38%",
+          left: "50%",
+          transform: "translate(-50%, -50%)", // Ensure it stays centered both horizontally and vertically
+        }}
+      >
+        {/* <Card> */}
+        {/* <Typography variant="h6">Your Message Has Been Sent!</Typography> */}
+
+        <TaskioCard
           sx={{
             padding: 3,
             width: 400,
@@ -100,17 +108,27 @@ const ChatGPTClone = () => {
             alignItems: "center",
             boxShadow: 3,
             borderRadius: 2,
-            position: "absolute",
-            top: "50%",
-            // mt: 8,
-            transform: "translateY(-50%)", // Center the card vertically
           }}
+          task={task}
+          handleCopyToClipboard={() => { }}
+          handleDownloadFile={handleDownloadFile}
+          handleShowDetails={() => { }}
+          handleMenuOpen={() => { }}
+          handleDeleteTask={() => { }}
+          handleCancelTask={() => { }}
         >
-          <Typography variant="h6">Your Message Has Been Sent!</Typography>
-        </Card>
-      )}
-    </Container>
-  );
+        </TaskioCard>
+
+        {/* </Card> */}
+      </motion.div>
+
+
+
+
+
+    )}
+  </Container>
+);
 };
 
 export default ChatGPTClone;
