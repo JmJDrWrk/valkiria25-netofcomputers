@@ -2,16 +2,18 @@ import React, { useState } from "react";
 import { Box, Typography, Chip, CircularProgress, Button, IconButton, Menu, MenuItem } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import taskio from "../../api/taskio/taskio";
-
+import { fontSize } from "@mui/system";
+import './taskio.css'
 const TaskioCard =
-  ({ 
+  ({
     task,
     handleCopyToClipboard,
     handleDownloadFile,
     handleShowDetails,
     handleMenuOpen,
     handleDeleteTask,
-    handleCancelTask 
+    handleCancelTask,
+    minimalInfo = false
   }) => {
 
     const [anchorEl, setAnchorEl] = useState(null);
@@ -24,22 +26,29 @@ const TaskioCard =
 
     return (
       <Box sx={{ border: "1px solid #ddd", borderRadius: "8px", p: 2, boxShadow: 2, position: "relative" }}>
-        <Typography variant="h6">{task.data.task}</Typography>
-        <Typography variant="body2" color="textSecondary">
-          Task ID: {task.task_id}
-        </Typography>
-        <Typography variant="body2" color="textSecondary">
-          Owned-By{" "}
-          <span
-            style={{ color: "blue", cursor: "pointer" }}
-            onClick={() => handleCopyToClipboard(task.token)}
-          >
-            Copy
-          </span>
-        </Typography>
+        {minimalInfo && (
+          <>
+            <Typography variant="h6">{task.data.task}</Typography>
+            <Typography variant="body2" color="textSecondary">
+              Task ID: {task.task_id}
+            </Typography>
+            <Typography variant="body2" color="textSecondary">
+              Owned-By{" "}
+              <span
+                style={{ color: "blue", cursor: "pointer" }}
+                onClick={() => handleCopyToClipboard(task.token)}
+              >
+                Copy
+              </span>
+            </Typography>
+          </>
+        )
+
+        }
 
         {/* Displaying progress bar or Circular progress based on task state */}
         {task.state === "uploading" && (
+
           <Box sx={{ position: "relative", display: "inline-flex", mt: 2 }}>
             <CircularProgress
               variant="determinate"
@@ -61,19 +70,24 @@ const TaskioCard =
                 color: "#3f51b5",
               }}
             >
-              <Typography variant="h6">{task.progress}%</Typography>
+              {minimalInfo ? (
+                <Typography variant="h6">{task.progress}%</Typography>
+              ) : (
+                <Typography variant="h6">Uploading Data</Typography>
+              )}
             </Box>
           </Box>
         )}
 
         {task.state === "processing" ? (
-          <Box sx={{ position: "relative", display: "inline-flex", mt: 2 }}>
+          <Box sx={{ position: "relative", display: "inline-flex", mt: 2, animation: "blink 1.5s infinite ease-in-out" }}>
             <CircularProgress
               size={100}
               thickness={4}
               sx={{
-                color: "black",
-                animationDuration: "1550ms",
+                color: "#4f4f4f",
+                animationDuration: "1150ms",
+                // animation: "blink 0.5s infinite ease-in-out"
               }}
             />
             <Box
@@ -84,9 +98,23 @@ const TaskioCard =
                 transform: "translate(-50%, -50%)",
                 fontWeight: "bold",
                 color: "#3f51b5",
+
               }}
             >
-              <Typography variant="h6">{task.progress}%</Typography>
+              {minimalInfo ? (
+                <Typography variant="h6">{task.progress}%</Typography>
+              ) : (
+                <Typography
+                  variant="h6"
+                  sx={{
+                    fontSize: "0.85rem",
+                    color: "black",
+                    // animation: "blink 1.5s infinite ease-in-out"
+                  }}
+                >
+                  generating image...
+                </Typography>
+              )}
             </Box>
           </Box>
         ) : (
@@ -123,29 +151,35 @@ const TaskioCard =
         )}
 
         {/* Show Details button */}
-        <Typography
-          variant="body2"
-          sx={{ color: "blue", cursor: "pointer", mt: 2 }}
-          onClick={() => handleShowDetails(task.data.details)}
-        >
-          Show Details
-        </Typography>
+        {minimalInfo && (
+          <Typography
+            variant="body2"
+            sx={{ color: "blue", cursor: "pointer", mt: 2 }}
+            onClick={() => handleShowDetails(task.data.details)}
+          >
+            Show Details
+          </Typography>
 
+        )}
         {/* 3-point menu for task actions */}
-        <IconButton
-          sx={{ position: "absolute", top: 10, right: 10 }}
-          onClick={(e) => handleMenuOpen(e, task.task_id)}
-        >
-          <MoreVertIcon />
-        </IconButton>
-        <Menu
-          anchorEl={anchorEl}
-          open={Boolean(anchorEl) && selectedTaskId === task.task_id}
-          onClose={handleMenuClose}
-        >
-          <MenuItem onClick={() => handleDeleteTask(task.task_id)}>Delete</MenuItem>
-          <MenuItem onClick={() => handleCancelTask(task.task_id)}>Cancel</MenuItem>
-        </Menu>
+        {minimalInfo && (
+          <>
+            <IconButton
+              sx={{ position: "absolute", top: 10, right: 10 }}
+              onClick={(e) => handleMenuOpen(e, task.task_id)}
+            >
+              <MoreVertIcon />
+            </IconButton>
+            <Menu
+              anchorEl={anchorEl}
+              open={Boolean(anchorEl) && selectedTaskId === task.task_id}
+              onClose={handleMenuClose}
+            >
+              <MenuItem onClick={() => handleDeleteTask(task.task_id)}>Delete</MenuItem>
+              <MenuItem onClick={() => handleCancelTask(task.task_id)}>Cancel</MenuItem>
+            </Menu>
+          </>
+        )}
       </Box>
     );
   };

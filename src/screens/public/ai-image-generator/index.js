@@ -31,7 +31,7 @@ const ChatGPTClone = () => {
         const lastTask = utasks[utasks.length - 1];
         console.log("Last Task Updated:", lastTask);
         setTask(lastTask);
-        setDisableChat(lastTask.state=='processing'); // Disable chat if not processed
+        setDisableChat(lastTask.state == 'processing'); // Disable chat if not processed
       } else {
         setDisableChat(false); // Default to disabled if no tasks exist
       }
@@ -55,80 +55,81 @@ const ChatGPTClone = () => {
       "use_public_files": false,
       "task_type": "no_data",
       "argdict": {
-        "output_file_name": "lake",
+        "output_file_name": input.replaceAll(' ', '_'),
         "prompt": input,
         "steps": 1
       },
       "task_type": "no_data"
     }
-  
 
 
-  if (clientId && pseudoTask) {
-    taskio.pushTask(pseudoTask);
-    console.log(' Sending', pseudoTask)
-  } else {
-    alert("Please provide a client ID and task data.");
+
+    if (clientId && pseudoTask) {
+      taskio.pushTask(pseudoTask);
+      console.log(' Sending', pseudoTask)
+    } else {
+      alert("Please provide a client ID and task data.");
+    }
   }
-}
-    // Function to download files
-    const handleDownloadFile = (task, fileName) => {
-      console.log('flint', task, fileName)
-      taskio.requestFile(task, fileName);
+  // Function to download files
+  const handleDownloadFile = (task, fileName) => {
+    console.log('flint', task, fileName)
+    taskio.requestFile(task, fileName);
   };
-return (
-  <Container maxWidth="sm" sx={{ display: "flex", flexDirection: "column", height: "100vh", p: 2, justifyContent: "center", alignItems: "center" }}>
+  return (
+    <Container maxWidth="sm" sx={{ display: "flex", flexDirection: "column", height: "100vh", p: 2, justifyContent: "center", alignItems: "center" }}>
 
 
-    <ChatBox disableChat={disableChat} onSendMessage={onChatInput} />
+      <ChatBox disableChat={disableChat} onSendMessage={onChatInput} />
 
-    {task && (
+      {task && (
 
 
-      <motion.div
-        initial={{ opacity: 0 }} // Start with opacity 0
-        animate={{ opacity: 1 }} // Animate to full opacity
-        transition={{ duration: 0.5 }} // Set the duration of the fade-in
-        style={{
-          position: "absolute", // Position it absolutely within the parent
-          top: "38%",
-          left: "50%",
-          transform: "translate(-50%, -50%)", // Ensure it stays centered both horizontally and vertically
-        }}
-      >
-        {/* <Card> */}
-        {/* <Typography variant="h6">Your Message Has Been Sent!</Typography> */}
-
-        <TaskioCard
-          sx={{
-            padding: 3,
-            width: 400,
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            boxShadow: 3,
-            borderRadius: 2,
+        <motion.div
+          initial={{ opacity: 0 }} // Start with opacity 0
+          animate={{ opacity: 1 }} // Animate to full opacity
+          transition={{ duration: 0.5 }} // Set the duration of the fade-in
+          style={{
+            position: "absolute", // Position it absolutely within the parent
+            top: "38%",
+            left: "50%",
+            transform: "translate(-50%, -50%)", // Ensure it stays centered both horizontally and vertically
+            textAlign: "center"
           }}
-          task={task}
-          handleCopyToClipboard={() => { }}
-          handleDownloadFile={handleDownloadFile}
-          handleShowDetails={() => { }}
-          handleMenuOpen={() => { }}
-          handleDeleteTask={() => { }}
-          handleCancelTask={() => { }}
         >
-        </TaskioCard>
+          {/* <Card> */}
+          {/* <Typography variant="h6">Your Message Has Been Sent!</Typography> */}
 
-        {/* </Card> */}
-      </motion.div>
+          <TaskioCard
+            sx={{
+              padding: 3,
+              width: 400,
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              boxShadow: 3,
+              borderRadius: 2,
+            }}
+            task={task}
+            handleCopyToClipboard={() => { }}
+            handleDownloadFile={handleDownloadFile}
+            handleShowDetails={() => { }}
+            handleMenuOpen={() => { }}
+            handleDeleteTask={() => { }}
+            handleCancelTask={() => { }}
+          >
+          </TaskioCard>
+
+          {/* </Card> */}
+        </motion.div>
 
 
 
 
 
-    )}
-  </Container>
-);
+      )}
+    </Container>
+  );
 };
 
 export default ChatGPTClone;
