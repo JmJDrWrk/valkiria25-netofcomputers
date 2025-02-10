@@ -27,6 +27,12 @@ const slipknotTextII = `
 Algunos dicen que son americanos, otros aseguran que al menos el cantante se ha empadronado en Viveiro, vuelve....nuestro viejo amigo Corey con su nueva banda "Nudos Corredizos" (sí, ha prometido cantar todos sus temas en español, no se lo pueden perder!)
 `
 
+const fallingInReverseTextII = `
+Falling in Reverse es una banda de post-hardcore formada en 2008 por Ronnie Radke. Mezclan rock, rap y electrónica con letras intensas. Su álbum debut, The Drug in Me Is You, los hizo famosos.
+
+Con el tiempo, han explorado sonidos más variados como el hard rock. Canciones como Popular Monster han sido grandes éxitos. Ronnie Radke sigue siendo una figura influyente en la escena.
+`;
+
 const data = [
 
     // {
@@ -38,23 +44,29 @@ const data = [
     //     "linkName": "Escuchar en Spotify"
     // },
     {
-        "releaseDate": "2025-02-06",
-        "title": "Slipknot",
-        "paragraph": slipknotTextII,
-        "image": "https://media4.giphy.com/media/RsX8mRQajF77jdlMRx/giphy.gif?cid=6c09b952mr0oejlg5l8dgkav0cq933svx59y6i6twdk247ak&ep=v1_internal_gif_by_id&rid=giphy.gif&ct=g",
-        "link": "https://open.spotify.com/intl-es/artist/05fG473iIaoy82BF1aGhL8",
-        "linkName": "Escuchar en Spotify"
+        releaseDate: "2025-02-06",
+        title: "Slipknot",
+        paragraph: slipknotTextII,
+        image: "https://media4.giphy.com/media/RsX8mRQajF77jdlMRx/giphy.gif?cid=6c09b952mr0oejlg5l8dgkav0cq933svx59y6i6twdk247ak&ep=v1_internal_gif_by_id&rid=giphy.gif&ct=g",
+        link: "https://open.spotify.com/intl-es/artist/05fG473iIaoy82BF1aGhL8",
+        linkName: "Escuchar en Spotify"
     },
     {
-        "releaseDate": "2025-02-06",
-        "title": "Aphonnic",
-        "paragraph": aphonicTextII,
-        "image": "https://netofcomputers.com/media/bandoftheweek/aphonnicII.gif",
-        "link": "https://open.spotify.com/intl-es/artist/0fJ1uLCAxmCnkmaOY0jtAl",
-        "linkName": "Escuchar en Spotify"
+        releaseDate: "2025-02-06",
+        title: "Aphonnic",
+        paragraph: aphonicTextII,
+        image: "https://netofcomputers.com/media/bandoftheweek/aphonnicII.gif",
+        link: "https://open.spotify.com/intl-es/artist/0fJ1uLCAxmCnkmaOY0jtAl",
+        linkName: "Escuchar en Spotify"
     },
     {
-
-    }
+        releaseDate: "2025-02-06",
+        title: "Falling In Reverse",
+        paragraph: fallingInReverseTextII,
+        image: "https://netofcomputers.com/media/bandoftheweek/fallinginreverse.gif",
+        link: "https://open.spotify.com/intl-es/artist/2CmaKO2zEGJ1NWpS1yfVGz",
+        linkName: "Escuchar en Spotify"
+    }, 
+    {}
 ]
 export default data;

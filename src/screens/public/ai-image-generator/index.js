@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
-import { TextField, Button, Container, Box, Typography, Card } from "@mui/material";
+import { TextField, Button, Container, Box, Typography, Card, IconButton } from "@mui/material";
+import { ChevronLeft, ChevronRight } from "@mui/icons-material";
 import { motion } from "framer-motion"; // Import framer-motion
 import TaskioCard from "../../../components/util/TaskioCard"
 import ChatBox from "./components/ChatBox";
@@ -28,6 +29,7 @@ const ChatGPTClone = () => {
     taskio.refreshTasks();
     taskio.onUpdate_tasks((utasks) => {
       if (utasks.length > 0) {
+        setTasks(utasks);
         const lastTask = utasks[utasks.length - 1];
         console.log("Last Task Updated:", lastTask);
         setTask(lastTask);
@@ -76,6 +78,14 @@ const ChatGPTClone = () => {
     console.log('flint', task, fileName)
     taskio.requestFile(task, fileName);
   };
+
+  const changeTask = (direction) => () => {
+    const currentIndex = tasks.indexOf(task);
+    const nextIndex = currentIndex + direction;
+    if (nextIndex >= 0 && nextIndex < tasks.length) {
+      setTask(tasks[nextIndex]);
+    }
+  }
   return (
     <Container maxWidth="sm" sx={{ display: "flex", flexDirection: "column", height: "100vh", p: 2, justifyContent: "center", alignItems: "center" }}>
 
@@ -94,32 +104,41 @@ const ChatGPTClone = () => {
             top: "38%",
             left: "50%",
             transform: "translate(-50%, -50%)", // Ensure it stays centered both horizontally and vertically
-            textAlign: "center"
+            textAlign: "center",
+            display: "flex"
           }}
         >
           {/* <Card> */}
           {/* <Typography variant="h6">Your Message Has Been Sent!</Typography> */}
+          <IconButton onClick={changeTask(-1)}>
+            <ChevronLeft />
+          </IconButton>
+          <Box>
+            <Typography variant="h6">Task {tasks.indexOf(task) + 1} of {tasks.length}</Typography>
+            <TaskioCard
+              sx={{
+                padding: 3,
+                width: 400,
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                boxShadow: 3,
+                borderRadius: 2,
+              }}
+              task={task}
+              handleCopyToClipboard={() => { }}
+              handleDownloadFile={handleDownloadFile}
+              handleShowDetails={() => { }}
+              handleMenuOpen={() => { }}
+              handleDeleteTask={() => { }}
+              handleCancelTask={() => { }}
+            >
+            </TaskioCard>
+          </Box>
 
-          <TaskioCard
-            sx={{
-              padding: 3,
-              width: 400,
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              boxShadow: 3,
-              borderRadius: 2,
-            }}
-            task={task}
-            handleCopyToClipboard={() => { }}
-            handleDownloadFile={handleDownloadFile}
-            handleShowDetails={() => { }}
-            handleMenuOpen={() => { }}
-            handleDeleteTask={() => { }}
-            handleCancelTask={() => { }}
-          >
-          </TaskioCard>
-
+          <IconButton onClick={changeTask(1)}>
+            <ChevronRight />
+          </IconButton>
           {/* </Card> */}
         </motion.div>
 

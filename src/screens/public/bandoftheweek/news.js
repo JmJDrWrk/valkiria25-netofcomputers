@@ -5,6 +5,7 @@ import bands from './bands';
 const Newspaper = () => {
     // State to manage article expansion
     const [expandedArticle, setExpandedArticle] = useState(null);
+    const [eatAddActive] = useState(false);
 
     // Function to toggle the article expansion
     const toggleArticle = (index) => {
@@ -15,10 +16,12 @@ const Newspaper = () => {
     const [showModal, setShowModal] = useState(false);
     const [showModalExit, setShowModalExit] = useState(false);
     // Hide the modal after 5 seconds (or based on any other condition)
+
     useEffect(() => {
         // Show modal after 2 seconds
+
         const showTimer = setTimeout(() => {
-            setShowModal(true);
+            setShowModal(true && eatAddActive);
 
             // Hide modal after 5 seconds from when it appears
             const hideTimer = setTimeout(() => {
@@ -28,30 +31,32 @@ const Newspaper = () => {
             return () => clearTimeout(hideTimer); // Cleanup hide timer
         }, 3500);
 
+
         return () => clearTimeout(showTimer); // Cleanup show timer
     }, []);
     const handleAddClick = () => {
         window.open("https://netofcomputers.com/picso.html", "_blank");
         setShowModalExit(true);
     }
+    
 
     return (
         <div className="newspaper">
             {/* Modal */}
             {showModal && (
-                <div className="modal"  onClick={handleAddClick}>
+                <div className="modal" onClick={handleAddClick}>
                     <div className="modal-content">
                         {/* <span className="close">&times;</span> */}
                         {showModalExit && (<span className="close" onClick={() => setShowModal(false)}>&times;</span>)}
                         <h2>Buy Now a 0riginal Picso</h2>
                         <figure className="figure">
-                                    <img
-                                        className="media"
-                                        src="https://netofcomputers.com/paco/paco.jpg"
-                                        alt="Avenged Sevenfold"
-                                    />
-                                    <figcaption className="figcaption" onClick={() => window.location.href = "band.link"}></figcaption>
-                                </figure>
+                            <img
+                                className="media"
+                                src="https://netofcomputers.com/paco/paco.jpg"
+                                alt="Avenged Sevenfold"
+                            />
+                            <figcaption className="figcaption" onClick={() => window.location.href = "band.link"}></figcaption>
+                        </figure>
                         <p>An incredibly unique and exclusive masterpiece of a Picso</p>
                         <h1>20$</h1>
                     </div>
