@@ -3,122 +3,111 @@ import './newnews.css';
 import bands from './bands';
 
 const Newspaper = () => {
-    // State to manage article expansion
     const [expandedArticle, setExpandedArticle] = useState(null);
-    const [eatAddActive] = useState(false);
-
-    // Function to toggle the article expansion
-    const toggleArticle = (index) => {
-        setExpandedArticle(expandedArticle === index ? null : index);
-        console.log('bands', bands)
-    };
-    // State to manage modal visibility
+    const [revealLastTitle, setRevealLastTitle] = useState(false);
     const [showModal, setShowModal] = useState(false);
     const [showModalExit, setShowModalExit] = useState(false);
-    // Hide the modal after 5 seconds (or based on any other condition)
 
+    // useEffect(() => {
+    //     const showTimer = setTimeout(() => {
+    //         setShowModal(true);
+    //         const hideTimer = setTimeout(() => setShowModal(false), 5000);
+    //         return () => clearTimeout(hideTimer);
+    //     }, 3500);
+
+    //     return () => clearTimeout(showTimer);
+    // }, []);
+
+    // Load the reveal state from localStorage on mount
     useEffect(() => {
-        // Show modal after 2 seconds
-
-        const showTimer = setTimeout(() => {
-            setShowModal(true && eatAddActive);
-
-            // Hide modal after 5 seconds from when it appears
-            const hideTimer = setTimeout(() => {
-                setShowModal(false);
-            }, 150000);
-
-            return () => clearTimeout(hideTimer); // Cleanup hide timer
-        }, 3500);
-
-
-        return () => clearTimeout(showTimer); // Cleanup show timer
+        const storedReveal = localStorage.getItem('revealLastTitle');
+        if (storedReveal === 'true') {
+            setRevealLastTitle(true);
+        }
     }, []);
-    const handleAddClick = () => {
-        window.open("https://netofcomputers.com/picso.html", "_blank");
-        setShowModalExit(true);
-    }
-    
+
+    const toggleArticle = (index) => {
+        setExpandedArticle(expandedArticle === index ? null : index);
+    };
+
+    const handleLastTitleClick = (index) => {
+        if(!localStorage.getItem('revealLastTitle')){
+            localStorage.setItem('revealLastTitle', 'true');
+            setRevealLastTitle(true);
+        }else{
+            toggleArticle(index);
+        }
+        
+    };
 
     return (
         <div className="newspaper">
-            {/* Modal */}
             {showModal && (
-                <div className="modal" onClick={handleAddClick}>
+                <div className="modal" onClick={() => setShowModalExit(true)}>
                     <div className="modal-content">
-                        {/* <span className="close">&times;</span> */}
-                        {showModalExit && (<span className="close" onClick={() => setShowModal(false)}>&times;</span>)}
+                        {showModalExit && (
+                            <span className="close" onClick={() => setShowModal(false)}>&times;</span>
+                        )}
                         <h2>Buy Now a 0riginal Picso</h2>
                         <figure className="figure">
-                            <img
-                                className="media"
-                                src="https://netofcomputers.com/paco/paco.jpg"
-                                alt="Avenged Sevenfold"
-                            />
-                            <figcaption className="figcaption" onClick={() => window.location.href = "band.link"}></figcaption>
+                            <img className="media" src="https://netofcomputers.com/paco/paco.jpg" alt="Avenged Sevenfold" />
+                            <figcaption className="figcaption"></figcaption>
                         </figure>
                         <p>An incredibly unique and exclusive masterpiece of a Picso</p>
                         <h1>20$</h1>
                     </div>
                 </div>
             )}
-            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
 
             <div className="head">
                 <div className="headerobjectswrapper">
                     <div className="weatherforcastbox">
-                        <span style={{ fontStyle: 'italic' }}>
-                            Weather forecast for the next 24 hours: Plenty of Sunshine
-                        </span>
-                        <br />
-                        <span>Wind: 7km/h SSE; Ther: 21°C; Hum: 82%</span>
+                        <span style={{ fontStyle: 'italic' }}>Weather forecast for the next 24 hours: Plenty of Sunshine</span><br />
+                        <span>Wind: 7km/h SSE; Temp: 21°C; Hum: 82%</span>
                     </div>
                     <header>Band Of The Week</header>
                 </div>
                 <div className="subhead">Coru, NE - NO DONGLE 30, 2025 - JOTA ROM</div>
             </div>
-            <div className="newspaper-content">
-                {bands.map((band, index) => (
-                    <section className="article"
-                        onClick={() => band && band.title ? toggleArticle(index) : null} // Disable click if band is empty
-                        key={index}>
-                        <div className="head">
-                            <span className="headline hl5">
-                                {/* {expandedArticle === index ? band.title : '??? ???'} */}
-                                {band && band.title ? band.title : '??? ???'}
-                            </span>
-                        </div>
 
-                        {expandedArticle === index && (
-                            <>
-                                {/* Check if band.paragraph is not null/undefined before calling split */}
-                                {band && band.paragraph && band.paragraph.split('\n')
-                                    .filter((s) => s.trim() !== '')  // Filter out empty or null strings
-                                    .map((s, index) => (
-                                        <p key={index}>{s}</p>  // Use index as the key instead of the string itself
+            <div className="newspaper-content">
+                {bands.map((band, index) => {
+                    const isLast = index === bands.length - 1;
+                    return (
+                        <section
+                            className="article"
+                            key={index}
+                            onClick={() => isLast ? handleLastTitleClick(index) : toggleArticle(index)}
+                        >
+                            <div className="head">
+                                <span className={`headline hl5 ${isLast && revealLastTitle ? "reveal-title" : ""}`}>
+                                    {isLast && !revealLastTitle ? "??? ???" : band.title}
+                                </span>
+                            </div>
+
+                            {expandedArticle === index && (
+                                <>
+                                    {band.paragraph?.split("\n").map((s, i) => (
+                                        <p key={i}>{s}</p>
                                     ))}
 
-                                <figure className="figure">
-                                    <img
-                                        className="media"
-                                        src={band.image}
-                                        alt="Avenged Sevenfold"
-                                    />
-                                    <figcaption className="figcaption" onClick={() => window.location.href = band.link}></figcaption>
-                                </figure>
-                                {/* Spotify Icon Link */}
-                                <a href={band.link} target="_blank" rel="noopener noreferrer">
-                                    <i className="fab fa-spotify" style={{ fontSize: '30px', marginLeft: '10px', color: '#6c6c6c' }}></i>
-                                </a>
-                            </>
-                        )}
-                    </section>
-                ))}
+                                    <figure className="figure">
+                                        <img className="media" src={band.image} alt={band.title} />
+                                        <figcaption className="figcaption" onClick={() => window.location.href = band.link}></figcaption>
+                                    </figure>
 
-
+                                    <a href={band.link} target="_blank" rel="noopener noreferrer">
+                                        <i className="fab fa-spotify" style={{ fontSize: '30px', marginLeft: '10px', color: '#6c6c6c' }}></i>
+                                    </a>
+                                </>
+                            )}
+                        </section>
+                    );
+                })}
             </div>
+
             <footer className="newspaper-footer">
-                <p>Copyright © 2025 JotaRoma News. All lefts reserved.</p>
+                <p>Copyright © 2025 JotaRoma News. All rights reserved.</p>
             </footer>
         </div>
     );

@@ -5,7 +5,7 @@ import { AppBar, Toolbar, Typography, Button, Grid, Card, CardContent, Container
 
 
 import INDEX from './news'
-import Newspaper from './news';
+import CreateBand from './CreateBand';
 import ScratchOff from './scratch';
 // import TaskConsumer from './taskPuller';
 
@@ -49,7 +49,7 @@ function miniroutes() {
           <Routes>
 
             <Route path="/" element={<INDEX />} />
-            <Route path="/beta" element={<Newspaper />} />
+            <Route path="/write-article" element={<CreateBand />} />
             <Route path="/sc" element={<ScratchOff />} />
 
           </Routes>

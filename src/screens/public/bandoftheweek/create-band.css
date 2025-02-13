@@ -1,0 +1,30 @@
+.create-band-container {
+    width: 50%;
+    margin: auto;
+    text-align: center;
+}
+
+.band-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.band-form input, 
+.band-form textarea {
+    padding: 10px;
+    font-size: 16px;
+}
+
+.band-preview {
+    margin-top: 20px;
+    border: 1px solid #ddd;
+    padding: 10px;
+}
+
+.band-preview img {
+    width: 100%;
+    max-width: 300px;
+    margin-top: 10px;
+}
+

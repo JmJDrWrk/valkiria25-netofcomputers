@@ -27,11 +27,9 @@ const slipknotTextII = `
 Algunos dicen que son americanos, otros aseguran que al menos el cantante se ha empadronado en Viveiro, vuelve....nuestro viejo amigo Corey con su nueva banda "Nudos Corredizos" (sí, ha prometido cantar todos sus temas en español, no se lo pueden perder!)
 `
 
-const fallingInReverseTextII = `
-Falling in Reverse es una banda de post-hardcore formada en 2008 por Ronnie Radke. Mezclan rock, rap y electrónica con letras intensas. Su álbum debut, The Drug in Me Is You, los hizo famosos.
-
-Con el tiempo, han explorado sonidos más variados como el hard rock. Canciones como Popular Monster han sido grandes éxitos. Ronnie Radke sigue siendo una figura influyente en la escena.
-`;
+const fallingInReverseTextII = `Con un carismático Ronnie Radke al frente, este grupazo mezcla post-hardcore, metalcore y rock alternativo, con melodías pegadizas y letras que te hacen cuestionarte tu vida entera. 
+Con "Popular Monster" o "Prequel" han conquistado no solo a fans del metal, sino a gente de todo el mundo. Para quien no los conozca mucho, os diría que la mejor forma de saber en qué os estáis metiendo es ver sus videoclips: BRUTALES.
+Nadie lo sabía, nadie lo pedía, pero los necesitábamos.`;
 
 const data = [
 
@@ -66,7 +64,6 @@ const data = [
         image: "https://netofcomputers.com/media/bandoftheweek/fallinginreverse.gif",
         link: "https://open.spotify.com/intl-es/artist/2CmaKO2zEGJ1NWpS1yfVGz",
         linkName: "Escuchar en Spotify"
-    }, 
-    {}
+    }
 ]
 export default data;
