@@ -7,6 +7,7 @@ import { AppBar, Toolbar, Typography, Button, Grid, Card, CardContent, Container
 import INDEX from './news'
 import CreateBand from './CreateBand';
 import ScratchOff from './scratch';
+import Poll from './Poll';
 // import TaskConsumer from './taskPuller';
 
 
@@ -51,6 +52,7 @@ function miniroutes() {
             <Route path="/" element={<INDEX />} />
             <Route path="/write-article" element={<CreateBand />} />
             <Route path="/sc" element={<ScratchOff />} />
+            <Route path="/poll" element={<Poll />} />
 
           </Routes>
         </div>
