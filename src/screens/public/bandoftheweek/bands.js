@@ -66,4 +66,6 @@ const data = [
         linkName: "Escuchar en Spotify"
     }
 ]
+
+
 export default data;

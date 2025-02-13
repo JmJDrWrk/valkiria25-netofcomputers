@@ -24,6 +24,9 @@ const Newspaper = () => {
         if (storedReveal === 'true') {
             setRevealLastTitle(true);
         }
+        //Make a fetch to push last item https://netofcomputers.com:3090/tbotw/band-of-this-week
+
+        
     }, []);
 
     const toggleArticle = (index) => {

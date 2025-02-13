@@ -23,7 +23,7 @@
     scrollbar-width: thin;
     scrollbar-color: #7a7a7a #e0e0e0;
   }
-  * Ponemos un color de fondo y redondeamos las esquinas del track */
+
 .container::-webkit-scrollbar-track {
     background: #e1e1e1;
     border-radius: 4px;
