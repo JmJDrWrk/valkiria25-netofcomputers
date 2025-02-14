@@ -34,13 +34,13 @@ const CreateBand = () => {
         }
     }
     const dummyText = `
-        Con un carismático Ronnie Radke al frente, este grupazo mezcla post-hardcore, metalcore y rock alternativo, con melodías pegadizas y letras que te hacen cuestionarte tu vida entera.
+        Con una energía imparable y un sonido brutal, Gutalax se ha ganado un lugar en el corazón de los amantes del grindcore. Este grupo, originario de la República Checa, no solo destaca por su furia musical, sino también por sus letras directas y provocadoras, llenas de humor negro y sátira social.
 
-        Con "Popular Monster" o "Prequel" han conquistado no solo a fans del metal, sino a gente de todo el mundo. Para quien no los conozca mucho, os diría que la mejor forma de saber en qué os estáis metiendo es ver sus videoclips: BRUTALES.
+Con discos como "Flattus" y "Split", han hecho suya la esencia del grindcore, desatando una lluvia de riffs salvajes, blast beats imponentes y voces desgarradoras. Si no los conoces, pon el volumen a tope y déjate llevar por la velocidad y la intensidad de sus temas. Y si alguna vez te has preguntado si hay algo más explosivo que un temazo de 30 segundos… Gutalax tiene la respuesta.
 
-        Nadie lo sabía, nadie lo pedía, pero los necesitábamos.
+Si no los has visto en acción, no te lo pienses dos veces. ¿Quién diría que un poco de caos bien ejecutado podría ser tan divertido?
 
-        ¿Qué os parece? ¿Os gustaría que fueran la banda de la semana?`;
+¿Qué opináis? ¿Les gustaría que fueran la banda de la semana?`;
 
     useEffect(() => {
         const botw_current_edit = localStorage.getItem('botw_current_edit');

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { isMobile, browserName, osName } from 'react-device-detect';
 import {
   Box,
   Container,
@@ -54,11 +55,39 @@ const Poll = () => {
 
   const handleSubmit = async () => {
     let selected = filter_and_save();
-    // alert(`Selected Songs:\n${selected.join(", ")}`);
-    const test = await fetch('https://netofcomputers.com:3090/tbotw/check', {
-        method: 'GET',
+    const dev =`${isMobile}-${browserName}-${osName}`
+    const name = prompt('if you wanna this data to be used for the video edition, please put your name')
+    if (!name) {
+      return;
+    }
+    const poll = {
+      name,
+      selected
+    }
+    try {
+      const response = await fetch('https://netofcomputers.com:3090/tbotw/poll', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(poll),
+      });
 
-    });
+
+      // Check if the response was successful
+      if (!response.ok) {
+        throw new Error('Failed to add poll');
+      }
+
+      // Parse the JSON response
+      const result = await response.json();
+      console.log('poll added successfully:', result);
+
+      return result;
+    } catch (error) {
+      console.error('Error adding poll:', error);
+      throw error; 
+    }
     console.log('text', test);
   };
 

@@ -1,32 +1,39 @@
 import React, { useState, useEffect } from 'react';
 import './newnews.css';
-import bands from './bands';
+import bandsData from './bands';
 
 const Newspaper = () => {
+    const [bands, setBands] = useState(bandsData);
     const [expandedArticle, setExpandedArticle] = useState(null);
     const [revealLastTitle, setRevealLastTitle] = useState(false);
     const [showModal, setShowModal] = useState(false);
     const [showModalExit, setShowModalExit] = useState(false);
 
-    // useEffect(() => {
-    //     const showTimer = setTimeout(() => {
-    //         setShowModal(true);
-    //         const hideTimer = setTimeout(() => setShowModal(false), 5000);
-    //         return () => clearTimeout(hideTimer);
-    //     }, 3500);
-
-    //     return () => clearTimeout(showTimer);
-    // }, []);
-
-    // Load the reveal state from localStorage on mount
     useEffect(() => {
         const storedReveal = localStorage.getItem('revealLastTitle');
         if (storedReveal === 'true') {
             setRevealLastTitle(true);
         }
-        //Make a fetch to push last item https://netofcomputers.com:3090/tbotw/band-of-this-week
 
-        
+        // Fetch the band of the week and add it to the bands array
+        fetch('https://netofcomputers.com:3090/tbotw/band-of-this-week')
+            .then((response) => response.json())
+            .then((data) => {
+                // Ensure the response has the expected data
+                if (data && data.title && data.paragraph && data.image && data.link && data!==null) {
+                    setBands((prevBands) => {
+                        // Check for duplicates based on the band name
+                        const isDuplicate = prevBands.some(band => band.title === data.title);
+                        if (!isDuplicate) {
+                            return [...prevBands, data];
+                        }
+                        return prevBands;
+                    });
+                }
+            })
+            .catch((error) => {
+                console.error('Error fetching band of the week:', error);
+            });
     }, []);
 
     const toggleArticle = (index) => {
@@ -34,34 +41,16 @@ const Newspaper = () => {
     };
 
     const handleLastTitleClick = (index) => {
-        if(!localStorage.getItem('revealLastTitle')){
+        if (!localStorage.getItem('revealLastTitle')) {
             localStorage.setItem('revealLastTitle', 'true');
             setRevealLastTitle(true);
-        }else{
+        } else {
             toggleArticle(index);
         }
-        
     };
 
     return (
         <div className="newspaper">
-            {showModal && (
-                <div className="modal" onClick={() => setShowModalExit(true)}>
-                    <div className="modal-content">
-                        {showModalExit && (
-                            <span className="close" onClick={() => setShowModal(false)}>&times;</span>
-                        )}
-                        <h2>Buy Now a 0riginal Picso</h2>
-                        <figure className="figure">
-                            <img className="media" src="https://netofcomputers.com/paco/paco.jpg" alt="Avenged Sevenfold" />
-                            <figcaption className="figcaption"></figcaption>
-                        </figure>
-                        <p>An incredibly unique and exclusive masterpiece of a Picso</p>
-                        <h1>20$</h1>
-                    </div>
-                </div>
-            )}
-
             <div className="head">
                 <div className="headerobjectswrapper">
                     <div className="weatherforcastbox">

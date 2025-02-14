@@ -19,6 +19,7 @@
     "pako": "^2.1.0",
     "pitchfinder": "^2.3.2",
     "react": "^19.0.0",
+    "react-device-detect": "^2.2.3",
     "react-dom": "^19.0.0",
     "react-router-dom": "^7.1.1",
     "react-scripts": "5.0.1",
