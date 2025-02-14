@@ -1,3 +1,66 @@
+const Alice_Cooper = [
+    {
+        "name": "Lock Me Up",
+        "youtube": "https://www.youtube.com/results?search_query=Lock%20Me%20Up%20Crystal%20Lake"
+    },
+    {
+        "name": "Welcome to the Show",
+        "youtube": "https://www.youtube.com/results?search_query=Welcome%20to%20the%20Show%20Crystal%20Lake"
+    },
+    {
+        "name": "No More Mr. Nice Guy",
+        "youtube": "https://www.youtube.com/results?search_query=No%20More%20Mr.%20Nice%20Guy%20Crystal%20Lake"
+    },
+    {
+        "name": "I'm Eighteen",
+        "youtube": "https://www.youtube.com/results?search_query=I'm%20Eighteen%20Crystal%20Lake"
+    },
+    {
+        "name": "Under My Wheels",
+        "youtube": "https://www.youtube.com/results?search_query=Under%20My%20Wheels%20Crystal%20Lake"
+    },
+    {
+        "name": "Billion Dollar Babies",
+        "youtube": "https://www.youtube.com/results?search_query=Billion%20Dollar%20Babies%20Crystal%20Lake"
+    },
+    {
+        "name": "He's Back (The Man Behind the Mask)",
+        "youtube": "https://www.youtube.com/results?search_query=He's%20Back%20(The%20Man%20Behind%20the%20Mask)%20Crystal%20Lake"
+    },
+    {
+        "name": "Lost in America",
+        "youtube": "https://www.youtube.com/results?search_query=Lost%20in%20America%20Crystal%20Lake"
+    },
+    {
+        "name": "Hey Stoopid",
+        "youtube": "https://www.youtube.com/results?search_query=Hey%20Stoopid%20Crystal%20Lake"
+    },
+    {
+        "name": "Poison",
+        "youtube": "https://www.youtube.com/results?search_query=Poison%20Crystal%20Lake"
+    },
+    {
+        "name": "Feed My Frankenstein",
+        "youtube": "https://www.youtube.com/results?search_query=Feed%20My%20Frankenstein%20Crystal%20Lake"
+    },
+    {
+        "name": "Ballad of Dwight Fry",
+        "youtube": "https://www.youtube.com/results?search_query=Ballad%20of%20Dwight%20Fry%20Crystal%20Lake"
+    },
+    {
+        "name": "I Love the Dead",
+        "youtube": "https://www.youtube.com/results?search_query=I%20Love%20the%20Dead%20Crystal%20Lake"
+    },
+    {
+        "name": "Elected",
+        "youtube": "https://www.youtube.com/results?search_query=Elected%20Crystal%20Lake"
+    },
+    {
+        "name": "School's Out",
+        "youtube": "https://www.youtube.com/results?search_query=School's%20Out%20Crystal%20Lake"
+    }
+]
+
 const Crystal_Lake = [
     {
         "name": "Prometheus",
@@ -373,9 +436,73 @@ const Gorka = [
     }
 ]
 
-const Teksuo = []
+const Teksuo = [
+    {
+        name: "Endless",
+        youtube: "https://www.youtube.com/results?search_query=Endless"
+    },
+    {
+        name: "Raise The Flag",
+        youtube: "https://www.youtube.com/results?search_query=Raise%20The%20Flag"
+    },
+    {
+        name: "Lost In A Dream",
+        youtube: "https://www.youtube.com/results?search_query=Lost%20In%20A%20Dream"
+    },
+    {
+        name: "Rip My Heart Out",
+        youtube: "https://www.youtube.com/results?search_query=Rip%20My%20Heart%20Out"
+    },
+    {
+        name: "Nure Onna",
+        youtube: "https://www.youtube.com/results?search_query=Nure%20Onna"
+    },
+    {
+        name: "Natural Born Liars",
+        youtube: "https://www.youtube.com/results?search_query=Natural%20Born%20Liars"
+    },
+    {
+        name: "Holes (Live Version)",
+        youtube: "https://www.youtube.com/results?search_query=Holes%20(Live%20Version)"
+    },
 
-const Electric_Alley = []
+]
+// https://open.spotify.com/playlist/0hhqiOWK4G1ZNdqaAa48c0
+
+const Electric_Alley = [
+    {
+        "name": "No Control",
+        "youtube": "https://www.youtube.com/results?search_query=No%20Control%20Crystal%20Lake"
+    },
+    {
+        "name": "Hurricane",
+        "youtube": "https://www.youtube.com/results?search_query=Hurricane%20Crystal%20Lake"
+    },
+    {
+        "name": "One Lasting Light",
+        "youtube": "https://www.youtube.com/results?search_query=One%20Lasting%20Light%20Crystal%20Lake"
+    },
+    {
+        "name": "Last Letter",
+        "youtube": "https://www.youtube.com/results?search_query=Last%20Letter%20Crystal%20Lake"
+    },
+    {
+        "name": "Make It Through the Night",
+        "youtube": "https://www.youtube.com/results?search_query=Make%20It%20Through%20the%20Night%20Crystal%20Lake"
+    },
+    {
+        "name": "Thunderbird or Vulture",
+        "youtube": "https://www.youtube.com/results?search_query=Thunderbird%20or%20Vulture%20Crystal%20Lake"
+    },
+    {
+        "name": "Cowboy Song",
+        "youtube": "https://www.youtube.com/results?search_query=Cowboy%20Song%20Crystal%20Lake"
+    },
+    {
+        "name": "Get Electrified!",
+        "youtube": "https://www.youtube.com/results?search_query=Get%20Electrified!%20Crystal%20Lake"
+    }
+]
 
 const The_OffSpring = [
     {
@@ -784,6 +911,7 @@ const Corey_Taylor = [
     }
 ]
 const all = {
+    Alice_Cooper,
     Crystal_Lake,
     Machine_Head,
     Sum_41,
