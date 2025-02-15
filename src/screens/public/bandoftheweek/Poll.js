@@ -134,7 +134,17 @@ const Poll = () => {
                 gutterBottom
               >
                 {/* "https://netofcomputers.com/bandoftheweek/{group}" */}
-              <img src={`https://netofcomputers.com/media/bandoftheweek/artist/${group}.png`} alt={group} height={200} width={"auto"}/>
+                <img
+                  src={`https://netofcomputers.com/media/bandoftheweek/artist/${group}.png`}
+                  alt={group}
+                  style={{
+                    width: "100%",
+                    maxWidth: "300px",
+                    height: "auto",
+                    borderRadius: "10px",
+                    margin: "0 auto",
+                  }}
+                />
                 {/* {group} */}
               </Typography>
               <FormGroup>
@@ -152,7 +162,13 @@ const Poll = () => {
                         href={song.youtube}
                         target="_blank"
                         rel="noopener noreferrer"
+                        sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
                       >
+                        <img
+                          src="https://www.svgrepo.com/show/13671/youtube.svg"
+                          alt="YouTube"
+                          style={{ width: 16, height: 16, marginRight: 4 }}
+                        />
                         {song.name}
                       </Link>
                     }
