@@ -133,7 +133,9 @@ const Poll = () => {
                 textAlign="center"
                 gutterBottom
               >
-                {group}
+                {/* "https://netofcomputers.com/bandoftheweek/{group}" */}
+              <img src={`https://netofcomputers.com/media/bandoftheweek/artist/${group}.png`} alt={group} height={200} width={"auto"}/>
+                {/* {group} */}
               </Typography>
               <FormGroup>
                 {songs.map((song) => (
