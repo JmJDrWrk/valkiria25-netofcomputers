@@ -10,97 +10,75 @@ import {
   Typography,
   Paper,
   Link,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import pollbands from "./pollbands";
 import "./poll.css";
 
-console.log("-", pollbands);
 const songGroups = pollbands;
 
 const Poll = () => {
   const [selectedSongs, setSelectedSongs] = useState({});
   const [isLoading, setIsLoading] = useState(true);
+  const [notification, setNotification] = useState({ open: false, message: '', severity: 'success' });
 
-  // Load selected songs from localStorage on component mount
   useEffect(() => {
     const savedSongs = localStorage.getItem("botw_selected_songs");
     if (savedSongs) {
       const parsedSongs = JSON.parse(savedSongs);
-      // Map song names to selected status
       const restoredSongs = {};
       parsedSongs.forEach((songName) => {
-        restoredSongs[songName] = true; // Mark as selected
+        restoredSongs[songName] = true;
       });
       setSelectedSongs(restoredSongs);
-      console.log("Saved Data Restored!", restoredSongs);
     }
-    setIsLoading(false); // Set loading to false once data is fetched
+    setIsLoading(false);
   }, []);
 
   const filter_and_save = () => {
     const selected = Object.entries(selectedSongs)
       .filter(([_, selected]) => selected)
       .map(([name]) => name);
-    console.log("Selected Songs:", selected);
     localStorage.setItem("botw_selected_songs", JSON.stringify(selected));
     return selected;
   };
 
   const handleChange = (song) => {
-    setSelectedSongs((prev) => {
-      const updated = { ...prev, [song.name]: !prev[song.name] };
-      return updated;
-    });
+    setSelectedSongs((prev) => ({
+      ...prev,
+      [song.name]: !prev[song.name],
+    }));
   };
 
   const handleSubmit = async () => {
-    let selected = filter_and_save();
-    const dev =`${isMobile}-${browserName}-${osName}`
-    const name = prompt('if you wanna this data to be used for the video edition, please put your name')
-    if (!name) {
-      return;
-    }
-    const poll = {
-      name,
-      selected
-    }
+    const selected = filter_and_save();
+    const dev = `${isMobile}-${browserName}-${osName}`;
+    const name = prompt('Enter your name if you want your selections included in the video edit:');
+    if (!name) return;
+
+    const poll = { name, selected };
     try {
       const response = await fetch('https://netofcomputers.com:3090/tbotw/poll', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(poll),
       });
-
-
-      // Check if the response was successful
-      if (!response.ok) {
-        throw new Error('Failed to add poll');
-      }
-
-      // Parse the JSON response
+      if (!response.ok) throw new Error('Failed to add poll');
       const result = await response.json();
-      console.log('poll added successfully:', result);
-
-      return result;
+      console.log('Poll submitted successfully:', result);
+      setNotification({ open: true, message: 'Poll submitted successfully!', severity: 'success' });
     } catch (error) {
-      console.error('Error adding poll:', error);
-      throw error; 
+      console.error('Error submitting poll:', error);
+      setNotification({ open: true, message: 'Failed to submit poll.', severity: 'error' });
     }
-    console.log('text', test);
   };
 
-  // Use an effect to save when `selectedSongs` changes
   useEffect(() => {
-    if (!isLoading) {
-      filter_and_save();
-    }
-  }, [selectedSongs, isLoading]); // Runs when `selectedSongs` change
+    if (!isLoading) filter_and_save();
+  }, [selectedSongs, isLoading]);
 
-  if (isLoading) {
-    return <div>Loading...</div>; // Show loading message until data is loaded
-  }
+  if (isLoading) return <div>Loading...</div>;
 
   return (
     <Box
@@ -122,21 +100,26 @@ const Poll = () => {
         }}
       >
         <Container>
-          <Typography variant="h4" gutterBottom textAlign="center">
-            🎶 Pick Your Favorite Songs! 🎶
+          <Typography variant="h4" gutterBottom textAlign="center" sx={{ marginBottom: 2,
+            border: "1px solid #000",
+            borderRadius: "10px",
+            backgroundColor: "#ff1f0024",
+            padding: "10px",
+            fontSize: "1.135rem",
+          }}>
+           Select up to 3 songs per group to make your preferences as relevant as possible.
           </Typography>
           {Object.entries(songGroups).map(([group, songs]) => (
-            <Box key={group} sx={{ marginY: 2 }}>
-              <Typography
-                variant="h6"
-                color="primary"
-                textAlign="center"
-                gutterBottom
-              >
-                {/* "https://netofcomputers.com/bandoftheweek/{group}" */}
+            <Box key={group} sx={{ marginY: 2, textAlign: "center" }}>
+              <Typography variant="h6" color="primary" gutterBottom>
                 <img
                   src={`https://netofcomputers.com/media/bandoftheweek/artist/${group}.png`}
                   alt={group}
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = "";
+                    e.target.style.display = "none";
+                  }}
                   style={{
                     width: "100%",
                     maxWidth: "300px",
@@ -145,7 +128,9 @@ const Poll = () => {
                     margin: "0 auto",
                   }}
                 />
-                {/* {group} */}
+                {/* <Typography variant="subtitle1" color="textSecondary">
+                  {group}
+                </Typography> */}
               </Typography>
               <FormGroup>
                 {songs.map((song) => (
@@ -153,8 +138,8 @@ const Poll = () => {
                     key={song.name}
                     control={
                       <Checkbox
-                        checked={!!selectedSongs[song.name]} // Check if the song is selected
-                        onChange={() => handleChange(song)} // Toggle song selection
+                        checked={!!selectedSongs[song.name]}
+                        onChange={() => handleChange(song)}
                       />
                     }
                     label={
@@ -183,6 +168,19 @@ const Poll = () => {
             </Button>
           </Box>
         </Container>
+        <Snackbar
+          open={notification.open}
+          autoHideDuration={6000}
+          onClose={() => setNotification({ ...notification, open: false })}
+        >
+          <Alert
+            onClose={() => setNotification({ ...notification, open: false })}
+            severity={notification.severity}
+            sx={{ width: '100%' }}
+          >
+            {notification.message}
+          </Alert>
+        </Snackbar>
       </Paper>
     </Box>
   );
