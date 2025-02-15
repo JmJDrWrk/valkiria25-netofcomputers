@@ -945,7 +945,7 @@ if (typeof Chart === 'undefined') {
 
 function createGraph() {
   // Reference to pollresult (you can paste the pollresult object here directly)
-  const pollresult = await fetch('https://netofcomputers.com/tbotw/pollresult').then(res => res.json());
+  const pollresult = await fetch('https://netofcomputers.com:3090/tbotw/pollresults').then(res => res.json());
 
   // Create a dictionary to store song frequencies
   const songCount = {};
