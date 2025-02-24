@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./fire.css">
+</head>
+
+<body>
+    <div class="back"></div>
+    <div class="light"></div>
+    <div class="content">
+        <div class="fire">
+            <div class="bottom"></div>
+            <figure></figure>
+            <figure></figure>
+            <figure></figure>
+            <figure></figure>
+            <figure></figure>
+            <figure></figure>
+            <figure></figure>
+            <figure></figure>
+            <figure></figure>
+            <figure></figure>
+            <figure></figure>
+            <figure></figure>
+            <figure></figure>
+            <figure></figure>
+            <figure></figure>
+        </div>
+        <div class="reverse">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <p>
+        <!-- It was a pleasure<br>to burn.
+  <span class="author">Ray Bradbury, Fahrenheit 451</span> -->
+        <!DOCTYPE html>
+        <html lang="en">
+
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Document</title>
+            <link rel="stylesheet" href="./font.css">
+        </head>
+
+        <body>
+            <script>
+                element = document.getElementById("animate");
+
+                if (element) {
+                    // reset the transition by...
+                    element.addEventListener("click", function (e) {
+                        e.preventDefault;
+
+                        console.log('element', element.classList);
+
+                        // removing the class
+                        element.classList.remove("run-animation");
+
+                        // triggering reflow
+                        void element.offsetWidth;
+
+                        // and re-adding the class
+                        element.classList.add("run-animation");
+                    }, false);
+                }
+
+            </script>
+            <div class="wrapper run-animation" id="animate">
+                <div class="logo">
+
+                    <span class="marvel">PULGAS</span>
+                    <span class="studios">PRESENTA</span>
+
+                    <!-- <div class="restart">Restart</div> -->
+                </div>
+            </div>
+
+            <div class="images"></div>
+        </body>
+
+        </html>
+    </p>
+    <svg xmlns="http://www.w3.org/2000/svg" version="1.1">
+        <defs>
+            <filter id="goo">
+                <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />
+                <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7"
+                    result="goo" />
+                <feBlend in="SourceGraphic" in2="goo" />
+            </filter>
+        </defs>
+    </svg>
+</body>
+
+</html>
