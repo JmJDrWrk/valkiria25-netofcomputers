@@ -7,11 +7,12 @@ const MeOnly = () => {
         const handleButtonClick = async () => {
             const pollresult = await fetch('https://netofcomputers.com:3090/tbotw/pollresults').then(res => res.json());
             console.log(pollbands)
+            createGraph(pollresult)
             for (let key of Object.keys(pollbands)){
                 createGraph(pollresult, pollbands[key].map(p=>p.name))
             }
         };
-         function createGraph(pollresult, forEachBand=false) {
+         function createGraph(pollresult, forEachBand=[]) {
 
             try {
                 // let ctx = document.getElementById('myChart');
@@ -24,7 +25,7 @@ const MeOnly = () => {
                 const songCount = {};
                 pollresult.forEach((person) => {
                     person.selected
-                    .filter((song) => forEachBand.includes(song) || !forEachBand)
+                    .filter((song) => forEachBand.includes(song) || forEachBand.length === 0)
                     .forEach((song) => {
                         songCount[song] = (songCount[song] || 0) + 1;
                     });
