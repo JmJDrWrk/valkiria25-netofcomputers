@@ -64,6 +64,22 @@ const data = [
         image: "https://netofcomputers.com/media/bandoftheweek/fallinginreverse.gif",
         link: "https://open.spotify.com/intl-es/artist/2CmaKO2zEGJ1NWpS1yfVGz",
         linkName: "Escuchar en Spotify"
+    },
+    {
+        "title": "Against de Waves",
+        "paragraph": "Empezamos la semana con energías o qué? Es momento de dedicar la Band of the Week a mis queridos Against de Waves. \n\nAntes de Aphonnic, Teksuo o Catorce, la banda Against the Waves se coronó en los corazones de los resufriends como el concierto nacional más esperado del festival. Ada les descubría allá por 2018 preparando la Resu y aquel año los tres (Ada, Rubi y yo) no faltamos a la cita del bolo que inauguraba el festival. \n\nEstos chicos son de Madrid, llevan años luchando para salir adelante y apuestan por un metalcore con toques electrónicos que suena tan fresco como el primer día. Sus dos únicos discos son tremendos de principio a fin, y en los últimos años han apostado por varios singles de mayor producción que perpetúan el espíritu de la banda aún en tiempos más duros. \n\nImposible no sonreír con cada tema, preparaos para cantar sus coros y gozar los breakdowns. Aunque toque madrugar para verles, yo no me los perdería por nada del mundo.",
+        "image": "https://netofcomputers.com/media/bandoftheweek/against-waves.gif",
+        "link": "https://open.spotify.com/intl-es/artist/4w6EU6JFQulCOEXGdH7r4h",
+        "createdAt": "2025-02-17T08:46:47.392Z",
+        linkName: "Escuchar en Spotify"
+    },
+    {
+        "title": "NORTHLANE",
+        "paragraph": "¿Empezamos la semana sin energías o como? Esta semana, The Band of the Week dice: NORTHLANE.\n\nAl igual que Monuments, Corrosive y Against The Waves, Northlane es uno de esos grupos de los que tan solo he oído hablar... ¡Jajaja! Es broma.\n\nHe estado escuchando algunas de sus canciones. Supongo que si Skrillex hubiera formado un grupo con Architects, sonaría muy parecido.\nDe hecho, Northlane toma su nombre de North Lane, una canción de Architects.\n\nPero en serio, sus canciones son de todo menos aburridas. Y lo que es mejor: este pasado 2024 sacaron \"Mirror’s Edge\" a modo de EP, con nada menos que la colaboración de Winston McCall, de Parkway Drive.\n\nAsí que poneos inmediatamente a buscar esa canción. ",
+        "image": "https://i.makeagif.com/media/3-22-2014/tN5OCL.gif",
+        "link": "https://open.spotify.com/intl-es/artist/4w6EU6JFQulCOEXGdH7r4h",
+        "createdAt": "2025-02-24T14:04:45.154Z",
+        linkName: "Escuchar en Spotify"
     }
 ]
 

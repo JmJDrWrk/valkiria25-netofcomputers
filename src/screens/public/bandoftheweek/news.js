@@ -7,10 +7,10 @@ const Newspaper = () => {
     const [expandedArticle, setExpandedArticle] = useState(null);
     const [revealLastTitle, setRevealLastTitle] = useState(false);
     const [showModal, setShowModal] = useState(false);
-    const [showModalExit, setShowModalExit] = useState(false);
+    const [showModalExit, setShowModalExit] = useState(true);
 
     useEffect(() => {
-        const storedReveal = localStorage.getItem('revealLastTitle-I');
+        const storedReveal = localStorage.getItem('revealLastTitle-III');
         if (storedReveal === 'true') {
             setRevealLastTitle(true);
         }
@@ -20,7 +20,7 @@ const Newspaper = () => {
             .then((response) => response.json())
             .then((data) => {
                 // Ensure the response has the expected data
-                if (data && data.title && data.paragraph && data.image && data.link && data!==null) {
+                if (data && data.title && data.paragraph && data.image && data.link && data !== null) {
                     setBands((prevBands) => {
                         // Check for duplicates based on the band name
                         const isDuplicate = prevBands.some(band => band.title === data.title);
@@ -41,16 +41,65 @@ const Newspaper = () => {
     };
 
     const handleLastTitleClick = (index) => {
-        if (!localStorage.getItem('revealLastTitle-I')) {
-            localStorage.setItem('revealLastTitle-I', 'true');
+        if (!localStorage.getItem('revealLastTitle-III')) {
+            localStorage.setItem('revealLastTitle-III', 'true');
             setRevealLastTitle(true);
         } else {
             toggleArticle(index);
         }
     };
+    useEffect(() => {
+        const showTimer = setTimeout(() => {
+            //UNCOMMENT THIS LINE TO SHOW ADD
+            // setShowModal(true);
+            // const hideTimer = setTimeout(() => setShowModal(false), 5000);
+            // return () => clearTimeout(hideTimer);
+        }, 3500);
 
+        return () => clearTimeout(showTimer);
+    }, []);
+    const handleAddClick = () => {
+        window.open("https://netofcomputers.com/picso.html", "_blank");
+        setShowModalExit(true);
+    }
     return (
         <div className="newspaper">
+            {/* Modal */}
+            {/* {showModal && (
+                <div className="modal" onClick={() => setShowModalExit(true)} id="add-modal">
+                    <div className="modal-content">
+                        {showModalExit && (
+                            <span className="close" onClick={() => setShowModal(false)} id="add-modal-close" >&times;</span>
+                        )}
+                        <h2>Buy Now a 0riginal Picso</h2>
+                        <figure className="figure">
+                            <img className="media" src="https://netofcomputers.com/paco/paco.jpg" alt="Avenged Sevenfold" />
+                            <figcaption className="figcaption"></figcaption>
+                        </figure>
+                        <p>An incredibly unique and exclusive masterpiece of a Picso</p>
+                        <h1>20$</h1>
+                    </div>
+                </div>
+            )} */}
+            {showModal && (
+                <div className="modal" onClick={() => setShowModalExit(true)} id="add-modal">
+                    <div className="modal-content">
+                        {showModalExit && (
+                            <span className="close" onClick={() => setShowModal(false)} id="add-modal-close" >&times;</span>
+                        )}
+                        <h2>Resuvideo 2024!!??</h2>
+                        <figure className="figure">
+                            <img className="media" src="https://netofcomputers.com/media/bandoftheweek/others/VideoEditorJustEditing.jpg" alt="Editor Editing" />
+                            <figcaption className="figcaption"></figcaption>
+                        </figure>
+                        <p>
+                            Sabemos que os hemos prometido un video a finales del mes pasado, pero como la ocasión lo merece, hemos
+                            decidido aplazar la entrega todo lo necesario para que el resultado sea el mejor posible. ¡Gracias por vuestra paciencia!
+                        </p>
+                        <h1>??/??/2025</h1>
+                    </div>
+                </div>
+            )}
             <div className="head">
                 <div className="headerobjectswrapper">
                     <div className="weatherforcastbox">
