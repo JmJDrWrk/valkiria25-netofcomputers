@@ -10,7 +10,10 @@ const Newspaper = () => {
     const [showModalExit, setShowModalExit] = useState(true);
 
     useEffect(() => {
-        const storedReveal = localStorage.getItem('revealLastTitle-III');
+        // Remove this line to rollback to normal behavior
+        localStorage.removeItem('revealLastTitle-VII');
+
+        const storedReveal = localStorage.getItem('revealLastTitle-VII');
         if (storedReveal === 'true') {
             setRevealLastTitle(true);
         }
@@ -41,8 +44,8 @@ const Newspaper = () => {
     };
 
     const handleLastTitleClick = (index) => {
-        if (!localStorage.getItem('revealLastTitle-III')) {
-            localStorage.setItem('revealLastTitle-III', 'true');
+        if (!localStorage.getItem('revealLastTitle-VII')) {
+            localStorage.setItem('revealLastTitle-VII', 'true');
             setRevealLastTitle(true);
         } else {
             toggleArticle(index);

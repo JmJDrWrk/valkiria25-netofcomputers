@@ -80,6 +80,56 @@ const data = [
         "link": "https://open.spotify.com/intl-es/artist/4w6EU6JFQulCOEXGdH7r4h",
         "createdAt": "2025-02-24T14:04:45.154Z",
         linkName: "Escuchar en Spotify"
+    },
+    {
+        "title": "AVIANA",
+        "paragraph": "Esta semana una banda que lleva relativamente poco tiempo en la música internacional: AVIANA. \nDesde 2016, se definen como Metalcore pero ellos mismos dicen que les gusta experimentar. \nCon su inspiración principal en la banda In flames, tenemos temas con tintes de nu metal, metal japo, algunos temas melódicos... \nYo no los conozco de nada pero quieren ser recordados por sus conciertos, más que por uno u otro tema, así que... les daremos su oportunidad este año?",
+        "image": "https://media1.tenor.com/m/2Yp9az20wKYAAAAd/aviana-band.gif",
+        "link": "https://open.spotify.com/intl-es/artist/4w6EU6JFQulCOEXGdH7r4h",
+        "createdAt": "2025-03-04T08:26:51.391Z",
+        linkName: "Escuchar en Spotify"
+    },
+    {
+        "title": "JINJER",
+        "paragraph": "Ya tocaba un poco de girl power, así que esta semana Jinjer! Porque el metal está fuertemente dominado por hombres y por eso necesitamos a mujeres como Tatiana en nuestra lista.\n Desde que se unió a la banda en 2009 no han parado de crecer y experimentar. En parte se debe a los muchos cambios de miembros que ha sufrido la banda, ya que cada uno ha ido dejando su huella. En parte a Vlad, batería y encargado de dirigir y componer casi todas las canciones. Y por supuesto, en parte a la versatilidad de su cantante. Ella dice que no tiene técnica, no calienta la voz... simplemente canta y se deja llevar. \n\nSea por lo que sea, nos los perdimos en 2022 (ese año fue too much para todos) pero nos han perdonado y están de vuelta, así que esta vez no hay excusa! ",
+        "image": "https://i.gifer.com/6xsv.gif",
+        "link": "https://open.spotify.com/intl-es/artist/7o6cOczXTB8ioTAAJTbESf",
+        "createdAt": "2025-03-12T14:09:21.609Z"
+    },
+    {
+        "title": "UNPROCESSED",
+        "paragraph": "Atención!!! La banda de esta semana es peligrosa. Cuidado con atreverse a escuchar a los alemanes Unprocessed porque pueden convertirse instantáneamente en una obsesión.\n\nLo que habéis oído, esta banda de nombre a priori genérico y popularidad aún escueta se está convirtiendo en todo un fenómeno del metal progresivo. Son los hermanos espirituales de Polyphia, maestros de la melodía preciosista en guitarras futuristas, seguramente no hayáis escuchado nada igual. Su último álbum '...And Everything In Between' es una joya de principio a fin, sin que merezca la pena saltar ni una canción. \n\nJunto con Soen, para mí son la sorpresa del año. Arrolladores y únicos, sería todo un reto no disfrutar de cada segundo que dure su concierto.  ",
+        "image": "https://rockforpeople.cz/wp-content/uploads/2024/12/unprocessed-small.jpg",
+        "link": "NOTHINGHERE",
+        "createdAt": "2025-03-17T20:45:52.866Z"
+    },
+    {
+        "title": "SOEN",
+        "paragraph": "La semana pasada Diego nos habló de otra gran relevación de este año. Hablo de Soen, y no podría estar más de acuerdo, ya que cuando empecé a escuchar la Resulist fue el primer grupo en el que me fijé. \n\nFormado en 2004 por el exbaterista de Opeth y Amon Amarth, Martín López, no sacaron su primer álbum hasta 2012! Para mí esto es una clara muestra de la dedicación que le ponen a su música y se refleja perfectamente en cada álbum, donde cada sonido está cuidadosamente escogido para crear una atmósfera envolvente  y única.\n\nDesde el principio los compararon con Tool, cosa que a ellos les parece buena comparación (y a mí también). Metal progresivo moderno y letras reflexivas y melancólicas, ¿qué puede salir mal?",
+        "image": "https://www.rockzonemag.com/wp-content/uploads/2021/06/Soen-foto-2021-1021x550.gif",
+        "link": "NOTHINGHERE",
+        "createdAt": "2025-03-26T11:06:28.834Z"
+    },
+    {
+      "title": "Til Lindelman",
+      "paragraph": "El siguiente artista no necesita presentación: vuelve Til Lindelman con su proyecto en solitario.\n\nEn 2017 con Rammstein hizo uno de los mejores y más espectaculares conciertos del festival. Todos sabemos cómo cuenta Diego las historias... Pues yo aún recuerdo el momento en el que nos contó ese concierto. Recuerdo cómo me corroía la envidia porque de aquellas yo nunca había ido a un concierto de esas características (fuego fuego y fuego?) y fue cuando me di cuenta de que yo tenía que vivirlo por mí misma. No creo que en solitario vaya a ser tan brutal (aunque su música tiene la misma esencia y Til no deja de ser pirotécnico...) pero yo pienso verle y sacarme esa espinita vale?\n\nY bueno no os voy a obligar a aprender alemán... Pero hay una canción que tenemos que cantar TODOS, que español sí sabemos... sabéis cuál es no?",
+      "image": "https://64.media.tumblr.com/44e5cfbf1facf78bfe2eec6a0ebf70ad/0a9c85dc772cc83e-65/s640x960/ff1b1e4f3dbb2c740057b3885ef7d04d7949754d.gif",
+      "link": "NOTHINGHERE",
+      "createdAt": "2025-04-01T14:28:22.990Z"
+    },
+    {
+        "title": "Zeal & Ardor",
+        "paragraph": "Y como nos acercamos a la fecha señalada y todavía nos quedan demasiadas bandas por descubrir, esta semana viene doble.\n\nManuel Gagneux se preguntó qué pasaría si el góspel afroamericano y el black metal se cruzaran… y el resultado fue Zeal & Ardor.\n\nPor si no había grupos experimentales este año en el cártel, este es, sin duda, uno de los más sorprendentes. Cánticos espirituales, coros de esclavos, blues y black metal se combinan de una manera que no imaginábamos, pero que funciona.\n\nComo Soen, la atmósfera de Z&A es oscura y desafiante.\n",
+        "image": "https://cdn.mos.cms.futurecdn.net/FhvES6rjQbp8FiLkQ4DASR-840-80.jpg",
+        "link": "NOTHINGHERE",
+        "createdAt": "2025-03-28T11:42:33.767Z"
+    },  
+    {
+        "title": "Eagles of Death Metal",
+        "paragraph": "Aunque su nombre lo sugiere, no estamos ante una banda de death metal. Eagles of Death Metal os gustarán si os gustó el año pasado The Offspring y buscáis un grupo de rock y buen rollo.\n\nSu historia me llamó mucho la atención así que os la cuento. (Procedo a copiar la wikipedia)\n\nEn 1998 la madre de Jesse Hughes decide llamar a Joshua Homme el cual consideraba que era el único verdadero amigo de su hijo para que visitara a Jesse e intentara levantar su ánimo ya que en los últimos 6 meses había perdido más de 35 kilos e incluso temía que Jesse pudiera intentar suicidarse, todo debido a una severa depresión que sufría por haber encontrado a su esposa con un amante. Homme accede y al visitar a Jesse este le dice que empezó a componer canciones, las cuales impresionan a Homme y le propone que si al volver de su gira con Queens of the Stone Age Jesse tenÍa compuesta 30 canciones accedería a formar una banda con él. Tras la gira Jesse no había compuesto 30 canciones, sino 50 por lo que nace Eagles of Death Metal. \n\n¿Bastante interesante no?\n\nY bueno desde entonces han ido ganando fans, aunque Axl Rose no sea uno de ellos... (los bautizó \"The Pigeons of Shit Metal\", otra historia que podéis buscar). Su música ya os digo que da buen rollito y por ello han sido utilizados para anuncios promocionales de Nike o Nissan entre otros, o incluso para películas o videojuegos como el Gran Turismo 4.\n\nPero no todo es alegría y buen rollo, también tienen una parte de la historia muy trágica. Allá por 2015 estaban tocando en Paris cuando se produjo uno de los ataques terroristas más brutales en Europa de  la última década. Más de 80 víctimas solo en esa sala y 130 en total. Eso los marcó profundamente y es habitual que en los conciertos rindan homenaje a las víctimas. No fue fácil para ellos pero el grupo salió adelante y los tenemos de vuelta en el escenario dispuestos a darlo todo.",
+        "image": "https://i.scdn.co/image/40d4d2ecbefa83067c6e4c1575f59682fcc55a01",
+        "link": "NOTHINGHERE",
+        "createdAt": "2025-04-07T13:28:38.748Z"
     }
 ]
 
